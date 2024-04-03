@@ -135,7 +135,7 @@ public class DataFrame {
     public void printDataFrame() {
 
         System.out.print(" |");
-        for (String column : columns.keySet()) {
+        for (String column : labels) {
             System.out.print(" " + column + " |");
         }
         System.out.println();
@@ -148,6 +148,64 @@ public class DataFrame {
         for (Object[] row : rows) {
             System.out.print(" |");
             for (Object value : row) {
+                System.out.print(" " + value + " |");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Prints the first few rows of a tabular data structure, including column labels.
+     * The number of rows to display is specified by the parameter numberOfRows.
+     *
+     * @param numberOfRows The number of rows to display from the beginning of the data structure.
+     */
+    public void head(int numberOfRows) {
+        System.out.print(" |");
+        for (String column : labels) {
+            System.out.print(" " + column + " |");
+        }
+        System.out.println();
+
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("------");
+        }
+        System.out.println();
+
+        numberOfRows = Math.min(numberOfRows, rows.size());
+
+        for (int i = 0; i < numberOfRows; i++) {
+            System.out.print(" |");
+            for (Object value : rows.get(i)) {
+                System.out.print(" " + value + " |");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Prints the last few rows of a tabular data structure, including column labels.
+     * The number of rows to display is specified by the parameter numberOfRows.
+     *
+     * @param numberOfRows The number of rows to display from the end of the data structure.
+     */
+    public void tail(int numberOfRows) {
+        System.out.print(" |");
+        for (String column : labels) {
+            System.out.print(" " + column + " |");
+        }
+        System.out.println();
+
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("------");
+        }
+        System.out.println();
+
+        int startIndex = Math.max(rows.size() - numberOfRows, 0);
+
+        for (int i = startIndex; i < rows.size(); i++) {
+            System.out.print(" |");
+            for (Object value : rows.get(i)) {
                 System.out.print(" " + value + " |");
             }
             System.out.println();
