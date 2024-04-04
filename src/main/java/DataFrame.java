@@ -77,6 +77,11 @@ public class DataFrame {
         }
     }
 
+    public DataFrame(String filename){
+//        try (CSVReader csvReader = new CSVReader(new FileReader("book.csv"));) {
+
+        }
+
     /**
      * Returns a list of column labels in the DataFrame.
      *
