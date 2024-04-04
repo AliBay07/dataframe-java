@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -77,10 +79,14 @@ public class DataFrame {
         }
     }
 
-    public DataFrame(String filename){
-//        try (CSVReader csvReader = new CSVReader(new FileReader("book.csv"));) {
-
-        }
+    /**
+     * Constructs a DataFrame from a csv file.
+     *
+     * @param filepath The path to the csv file.
+     */
+    public DataFrame(String filepath) {
+        this(new CSVReader(filepath).allLines());
+    }
 
     /**
      * Returns a list of column labels in the DataFrame.
