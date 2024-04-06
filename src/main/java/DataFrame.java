@@ -2,14 +2,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
-
-/**
- * Represents a DataFrame, a two-dimensional labeled data structure with columns of potentially different types.
- * Provides methods to manipulate and analyze tabular data.
- */
+import java.lang.reflect.Array;
 public class DataFrame {
 
-    private final Hashtable<String, Object[][]> columns;
+    private final Hashtable<String, Object[]> columns;
     private final ArrayList<Object[]> rows;
     private final ArrayList<String> labels;
 
@@ -36,9 +32,9 @@ public class DataFrame {
 
         for (int i = 0; i < columnLabels.length; i++) {
             String columnLabel = columnLabels[i];
-            Object[][] columnData = new Object[data.length - 1][1];
+            Object[] columnData = new Object[data.length - 1];
             for (int j = 1; j < data.length; j++) {
-                columnData[j - 1][0] = data[j][i];
+                columnData[j - 1] = data[j][i];
             }
             columns.put(columnLabel, columnData);
         }
@@ -69,9 +65,9 @@ public class DataFrame {
         for (int i = 0; i < columns_labels.length; i++) {
             String columnLabel = columns_labels[i];
             labels.add(columnLabel);
-            Object[][] columnData = new Object[rows_values.length][1];
+            Object[] columnData = new Object[rows_values.length];
             for (int j = 0; j < rows_values.length; j++) {
-                columnData[j][0] = rows_values[j][i];
+                columnData[j] = rows_values[j][i];
             }
             columns.put(columnLabel, columnData);
         }
@@ -98,14 +94,20 @@ public class DataFrame {
             throw new IllegalArgumentException("Column with label " + columnName + " does not exist.");
         }
 
-        Object[][] columnData = columns.get(columnName);
+        Object[] columnData = columns.get(columnName);
         ArrayList<Object> columnValues = new ArrayList<>();
 
-        for (Object[] rowData : columnData) {
-            columnValues.add(rowData[0]);
+        for (Object rowData : columnData) {
+            columnValues.add(rowData);
         }
 
         return columnValues;
+    }
+    public Object[] getColumnValuesArray(String columnName) {
+        if (!columns.containsKey(columnName)) {
+            throw new IllegalArgumentException("Column with label " + columnName + " does not exist.");
+        }
+        return columns.get(columnName);
     }
 
     /**
@@ -126,6 +128,35 @@ public class DataFrame {
         Collections.addAll(rowValues, rowData);
 
         return rowValues;
+    }
+
+    /**
+     * Returns a label of the row at the specified index.
+     *
+     * @param index The index of the row.
+     * @return A String
+     * @throws IndexOutOfBoundsException if the index is out of range.
+     */
+    public String getLabel(int index){
+        if (index < 0 || index >= rows.size()) {
+            throw new IndexOutOfBoundsException("Index is out of range.");
+        }
+        return labels.get(index);
+    }
+
+    /**
+     * Returns all the labels in the dataframe.
+     *
+     * @return A list of strings
+     */
+    public Object[] getLabels(){
+        String[] lab = new String[labels.size()];
+        int i = 0;
+        for(String l : labels){
+            lab[i] = l;
+            i++;
+        }
+        return lab;
     }
 
     /**
@@ -211,4 +242,94 @@ public class DataFrame {
             System.out.println();
         }
     }
+
+    /**
+     * Returns a new DataFrame containing rows specified by the given array of indices.
+     *
+     * @param indices An array of indices indicating which rows to select.
+     * @return A new DataFrame containing selected rows.
+     * @throws IndexOutOfBoundsException if any index is out of range.
+     */
+    public DataFrame iloc(int[] indices){
+        Object[][] lines = new Object[indices.length][] ;
+        int i = 0;
+        for(int idx : indices){
+            lines[i] = rows.get(idx);
+            i++;
+        }
+        return new DataFrame((String[]) getLabels(), lines);
+    }
+
+    public DataFrame loc(String[] lab){
+        Object[][] res = new Object[rows.size()][lab.length];
+        int i = 0;
+        int j = 0;
+        for(String l : lab){
+            Object[] col = columns.get(l);
+            j=0;
+            for(Object o : col){
+                res[j][i]= o;
+                j++;
+            }
+            i++;
+        }
+        DataFrame df = new DataFrame(lab, res);
+        return df;
+    }
+    public static void main(String[] args){
+
+        String[] columnsLabels = {"Name", "Age", "Country"};
+        Object[][] rowsValues = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"},
+                {"Noemie", 23, "France"}
+        };
+        DataFrame df = new DataFrame(columnsLabels, rowsValues);
+        String[] columnsLabels2 = {"Name"};
+        Object[][] rowsValues2 = {
+                {"Ali"},
+                {"Serge"},
+                {"Jorane"},
+                {"Noemie"}
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+        String[] i={"Name"};
+        DataFrame df3 = df.loc(i);
+        System.out.println(df3.equals(df2));
+        df2.printDataFrame();
+        df3.printDataFrame();
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * Two DataFrames are considered equal if they have the same number of rows and columns,
+     * and if the elements in corresponding positions in their rows are equal.
+     *
+     * @param obj The reference object with which to compare.
+     * @return {@code true} if this DataFrame is equal to the obj argument; {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        DataFrame other = (DataFrame) obj;
+        if (rows.size() != other.rows.size() || columns.size() != other.columns.size()) {
+            return false;
+        }
+        for (int i = 0; i < rows.size(); i++) {
+            Object[] thisRow = rows.get(i);
+            Object[] otherRow = other.rows.get(i);
+            if (!Arrays.deepEquals(thisRow, otherRow)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
