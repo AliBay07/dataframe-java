@@ -4,12 +4,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class DataFrameTest {
 
-    @Test
-    public void testGetRowValues() {
+    private DataFrame df;
+
+    @Before
+    public void setUp() {
         String[] columnsLabels = {"Name", "Age", "Country"};
         Object[][] rowsValues = {
                 {"Ali", 21, "Lebanon"},
@@ -17,8 +20,11 @@ public class DataFrameTest {
                 {"Jorane", 23, "France"},
                 {"Noemie", 23, "France"}
         };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
+        df = new DataFrame(columnsLabels, rowsValues);
+    }
 
+    @Test
+    public void testGetRowValues() {
         ArrayList<Object> expectedRowValues = new ArrayList<>();
         expectedRowValues.add("Serge");
         expectedRowValues.add(24);
@@ -29,29 +35,11 @@ public class DataFrameTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetRowValuesWithInvalidIndex() {
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
-
         df.getRowValues(10);
     }
 
     @Test
     public void testGetColumnLabels() {
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
-
         ArrayList<String> expectedColumnLabels = new ArrayList<>();
         expectedColumnLabels.add("Name");
         expectedColumnLabels.add("Age");
@@ -63,27 +51,17 @@ public class DataFrameTest {
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithEmptyData() {
         Object[][] data = {};
-        DataFrame df = new DataFrame(data);
+        DataFrame df1 = new DataFrame(data);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithEmptyRow() {
         Object[][] data = {{}};
-        DataFrame df = new DataFrame(data);
+        DataFrame df1 = new DataFrame(data);
     }
 
     @Test
     public void testConstructorWithValidData() {
-        Object[][] data = {
-                {"Name", "Age", "Country"},
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-
-        DataFrame df = new DataFrame(data);
-
         assertEquals("Name", df.getColumnLabels().get(0));
         assertEquals("Age", df.getColumnLabels().get(1));
         assertEquals("Country", df.getColumnLabels().get(2));
@@ -114,7 +92,7 @@ public class DataFrameTest {
                 {"Jorane", 23, "France"},
                 {"Noemie", 23, "France"}
         };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
+        DataFrame df1 = new DataFrame(columnsLabels, rowsValues);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -126,15 +104,6 @@ public class DataFrameTest {
 
     @Test
     public void testConstructor2ParametersWithValidData() {
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
-
         assertEquals("Name", df.getColumnLabels().get(0));
         assertEquals("Age", df.getColumnLabels().get(1));
         assertEquals("Country", df.getColumnLabels().get(2));
@@ -158,46 +127,19 @@ public class DataFrameTest {
 
     @Test
     public void testGetLabel(){
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
-
         assertEquals("Name",df.getLabel(0));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetLabelWithInvalidIndex(){
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
         int[] i={0};
         df.iloc(i);
-
 
         String er = df.getLabel(12);
     }
 
 
     public void testEquals() {
-        String[] columnsLabels1 = {"Name", "Age", "Country"};
-        Object[][] rowsValues1 = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df1 = new DataFrame(columnsLabels1, rowsValues1);
-
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
                 {"Ali", 21, "Lebanon"},
@@ -217,26 +159,18 @@ public class DataFrameTest {
         DataFrame df3 = new DataFrame(columnsLabels3, rowsValues3);
 
         // Testing equality
-        assertTrue(df1.equals(df2));
-        assertTrue(df2.equals(df1));
+        assertTrue(df.equals(df2));
+        assertTrue(df2.equals(df));
 
         // Testing inequality
-        assertFalse(df1.equals(df3));
+        assertFalse(df.equals(df3));
         assertFalse(df2.equals(df3));
-        assertFalse(df3.equals(df1));
+        assertFalse(df3.equals(df));
         assertFalse(df3.equals(df2));
     }
 
     @Test
     public void testIlocWithIndexValide(){
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
                 {"Ali", 21, "Lebanon"},
@@ -249,14 +183,6 @@ public class DataFrameTest {
 
     @Test (expected = IndexOutOfBoundsException.class)
     public void testIlocWithIndexInvalide(){
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
                 {"Ali", 21, "Lebanon"},
@@ -268,14 +194,6 @@ public class DataFrameTest {
 
     @Test
     public void testLocWithIndexValide(){
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
         String[] columnsLabels2 = {"Name","Age"};
         Object[][] rowsValues2 = {
                 {"Ali",21},
@@ -290,17 +208,13 @@ public class DataFrameTest {
 
     @Test (expected = java.lang.IllegalArgumentException.class)
     public void testLocWithIndexInvalide(){
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
         String[] columnsLabels2 = {"Sexe"};
-        DataFrame df2 = new DataFrame(columnsLabels2, new Object[0][0]);
-        assertEquals(df2, df.loc(columnsLabels));
+        df.loc(columnsLabels2);
+    }
+    @Test (expected = java.lang.IllegalArgumentException.class)
+    public void testLocWithIndexInvalide(){
+        String[] columnsLabels2 = {};
+        df.loc(columnsLabels);
     }
 
 }

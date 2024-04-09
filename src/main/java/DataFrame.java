@@ -248,9 +248,12 @@ public class DataFrame {
      *
      * @param indices An array of indices indicating which rows to select.
      * @return A new DataFrame containing selected rows.
-     * @throws IndexOutOfBoundsException if any index is out of range.
+     * @throws IllegalArgumentException if indices is empty.
      */
     public DataFrame iloc(int[] indices){
+        if(indices.length == 0){
+            throw new IllegalArgumentException();
+        }
         Object[][] lines = new Object[indices.length][] ;
         int i = 0;
         for(int idx : indices){
@@ -266,13 +269,19 @@ public class DataFrame {
      *
      * @param lab An array of labels indicating which columns to select.
      * @return A new DataFrame containing selected columns.
-     * @throws IllegalArgumentException if any label is not found.
+     * @throws IllegalArgumentException if lab is empty, or label is not present in DataFrame.
      */
     public DataFrame loc(String[] lab){
+        if(lab.length == 0){
+            throw new IllegalArgumentException("Input data is empty");
+        }
         Object[][] res = new Object[rows.size()][lab.length];
         int i = 0;
         int j = 0;
         for(String l : lab){
+            if(labels.contains(l) == false){
+                throw new IllegalArgumentException("Invalid input data : column "+l+" is not in DataFrame");
+            }
             Object[] col = columns.get(l);
             j=0;
             for(Object o : col){
