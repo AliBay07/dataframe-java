@@ -1,9 +1,10 @@
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class DataFrameTest {
 
@@ -227,7 +228,7 @@ public class DataFrameTest {
     }
 
     @Test
-    public void testIlocWithIndex(){
+    public void testIlocWithIndexValide(){
         String[] columnsLabels = {"Name", "Age", "Country"};
         Object[][] rowsValues = {
                 {"Ali", 21, "Lebanon"},
@@ -246,8 +247,27 @@ public class DataFrameTest {
         assertTrue(df3.equals(df2));
     }
 
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void testIlocWithIndexInvalide(){
+        String[] columnsLabels = {"Name", "Age", "Country"};
+        Object[][] rowsValues = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"},
+                {"Noemie", 23, "France"}
+        };
+        DataFrame df = new DataFrame(columnsLabels, rowsValues);
+        String[] columnsLabels2 = {"Name", "Age", "Country"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21, "Lebanon"},
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+        int[] i={4};
+        DataFrame df3 = df.iloc(i);
+    }
+
     @Test
-    public void testLocWithIndex(){
+    public void testLocWithIndexValide(){
         String[] columnsLabels = {"Name", "Age", "Country"};
         Object[][] rowsValues = {
                 {"Ali", 21, "Lebanon"},
@@ -266,6 +286,21 @@ public class DataFrameTest {
         DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
         String[] i={"Name","Age"};
         assertTrue(df2.equals(df.loc(i)));
+    }
+
+    @Test (expected = java.lang.IllegalArgumentException.class)
+    public void testLocWithIndexInvalide(){
+        String[] columnsLabels = {"Name", "Age", "Country"};
+        Object[][] rowsValues = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"},
+                {"Noemie", 23, "France"}
+        };
+        DataFrame df = new DataFrame(columnsLabels, rowsValues);
+        String[] columnsLabels2 = {"Sexe"};
+        DataFrame df2 = new DataFrame(columnsLabels2, new Object[0][0]);
+        assertEquals(df2, df.loc(columnsLabels));
     }
 
 }

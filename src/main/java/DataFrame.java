@@ -260,6 +260,14 @@ public class DataFrame {
         return new DataFrame((String[]) getLabels(), lines);
     }
 
+
+    /**
+     * Returns a new DataFrame containing columns specified by the given array of labels.
+     *
+     * @param lab An array of labels indicating which columns to select.
+     * @return A new DataFrame containing selected columns.
+     * @throws IllegalArgumentException if any label is not found.
+     */
     public DataFrame loc(String[] lab){
         Object[][] res = new Object[rows.size()][lab.length];
         int i = 0;
@@ -275,30 +283,6 @@ public class DataFrame {
         }
         DataFrame df = new DataFrame(lab, res);
         return df;
-    }
-    public static void main(String[] args){
-
-        String[] columnsLabels = {"Name", "Age", "Country"};
-        Object[][] rowsValues = {
-                {"Ali", 21, "Lebanon"},
-                {"Serge", 24, "Armenia"},
-                {"Jorane", 23, "France"},
-                {"Noemie", 23, "France"}
-        };
-        DataFrame df = new DataFrame(columnsLabels, rowsValues);
-        String[] columnsLabels2 = {"Name"};
-        Object[][] rowsValues2 = {
-                {"Ali"},
-                {"Serge"},
-                {"Jorane"},
-                {"Noemie"}
-        };
-        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
-        String[] i={"Name"};
-        DataFrame df3 = df.loc(i);
-        System.out.println(df3.equals(df2));
-        df2.printDataFrame();
-        df3.printDataFrame();
     }
 
     /**
