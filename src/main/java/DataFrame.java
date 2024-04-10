@@ -102,6 +102,16 @@ public class DataFrame {
     }
 
     /**
+     * Retrieves the rows stored in this ArrayList.
+     * Each row is represented as an array of Objects.
+     *
+     * @return an ArrayList containing arrays of Objects representing rows.
+     */
+    public ArrayList<Object[]> getRows() {
+        return rows;
+    }
+
+    /**
      * Returns a list of values of the column with the given label.
      *
      * @param columnName The label of the column.
@@ -148,7 +158,7 @@ public class DataFrame {
      * @return A String
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
-    public String getLabel(int index){
+    public String getLabel(int index) {
         if (index < 0 || index >= rows.size()) {
             throw new IndexOutOfBoundsException("Index is out of range.");
         }
@@ -160,7 +170,7 @@ public class DataFrame {
      *
      * @return A list of strings
      */
-    public Object[] getLabels(){
+    public Object[] getLabels() {
         String[] lab = new String[labels.size()];
         int i = 0;
         for(String l : labels){
@@ -261,7 +271,7 @@ public class DataFrame {
      * @return A new DataFrame containing selected rows.
      * @throws IllegalArgumentException if indices is empty.
      */
-    public DataFrame iloc(int[] indices){
+    public DataFrame iloc(int[] indices) {
         if(indices.length == 0){
             throw new IllegalArgumentException();
         }
@@ -282,13 +292,13 @@ public class DataFrame {
      * @return A new DataFrame containing selected columns.
      * @throws IllegalArgumentException if lab is empty, or label is not present in DataFrame.
      */
-    public DataFrame loc(String[] lab){
-        if(lab.length == 0){
+    public DataFrame loc(String[] lab) {
+        if(lab.length == 0) {
             throw new IllegalArgumentException("Input data is empty");
         }
         Object[][] res = new Object[rows.size()][lab.length];
         int i = 0;
-        int j = 0;
+        int j;
         for(String l : lab){
             if(!labels.contains(l)){
                 throw new IllegalArgumentException("Invalid input data : column "+l+" is not in DataFrame");
@@ -388,7 +398,7 @@ public class DataFrame {
      * If a column contains non-numerical values or is empty, the mean value for that column is considered null.
      * @return An array containing the mean values for each column in the DataFrame.
      **/
-    public Object[] moyenne(){
+    public Object[] moyenne() {
         int i = 0;
         Object[] tab = new Object[labels.size()];
         for (String s : this.labels) {
@@ -403,7 +413,7 @@ public class DataFrame {
                     else
                         compteur ++;
                 }
-                tab[i] = (double) sum / (row.length - compteur);
+                tab[i] = sum / (row.length - compteur);
             } else {
                 tab[i] = null;
             }
@@ -416,7 +426,7 @@ public class DataFrame {
      * Counts the non-null elements in each column of the DataFrame.
      * @return An array containing the count of non-null elements for each column in the DataFrame.
      **/
-    public Integer[] count(){
+    public Integer[] count() {
         Integer[] tab = new Integer[labels.size()];
         int i = 0 ;
         for(String l : labels){
@@ -437,7 +447,7 @@ public class DataFrame {
      * If a column contains non-numerical values, the minimum and maximum values for that column are considered null.$
      * @return A 2D array where the first row contains the minimum values and the second row contains the maximum values
      **/
-    public Object[][] minEtMax(){
+    public Object[][] minEtMax() {
         Object[] min = new Object[labels.size()];
         Object[] max = new Object[labels.size()];
         int i = 0 ;
@@ -473,7 +483,7 @@ public class DataFrame {
      * @param mean An array containing the mean values for each column in the DataFrame.
      * @return An array containing the standard deviation values for each column in the DataFrame.
      */
-    public Object[] sd(Object[] mean){
+    public Object[] sd(Object[] mean) {
         Object[] sd = new Object[labels.size()];
         int i = 0;
         for(String l : labels){
@@ -496,7 +506,7 @@ public class DataFrame {
     /**
      * Generates a summary of the DataFrame, including count, mean, minimum, maximum, and standard deviation for each column.
      **/
-    public void describe(){
+    public void describe() {
         Object[] moy = moyenne();
         Integer[] count = count();
         Object[][] minmax = minEtMax();
@@ -509,35 +519,35 @@ public class DataFrame {
         }
         System.out.println();
         System.out.printf("%-10s", "Count");
-        System.out.printf("| ");
+        System.out.print("| ");
         for(int i : count){
             System.out.printf("%-10s", i);
             System.out.printf("%-2s", "");
         }
         System.out.println();
         System.out.printf("%-10s", "Mean");
-        System.out.printf("| ");
+        System.out.print("| ");
         for(Object m : moy){
             System.out.printf("%-10s", m);
             System.out.printf("%-2s", "");
         }
         System.out.println();
         System.out.printf("%-10s", "Min");
-        System.out.printf("| ");
+        System.out.print("| ");
         for(Object min : minmax[0]){
             System.out.printf("%-10s", min);
             System.out.printf("%-2s", "");
         }
         System.out.println();
         System.out.printf("%-10s", "Max");
-        System.out.printf("| ");
+        System.out.print("| ");
         for(Object max : minmax[1]){
             System.out.printf("%-10s", max);
             System.out.printf("%-2s", "");
         }
         System.out.println();
         System.out.printf("%-10s", "Ecart-Type");
-        System.out.printf("| ");
+        System.out.print("| ");
         for(Object e : sd){
             System.out.printf("%-10s", e);
             System.out.printf("%-2s", "");

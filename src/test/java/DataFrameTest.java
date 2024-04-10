@@ -368,6 +368,7 @@ public class DataFrameTest {
 
         DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, filterValues);
 
+        assertEquals(filteredDataFrame.getRows().size(), 1);
         assertEquals("Ali", filteredDataFrame.getRowValues(0).get(0));
         assertEquals(21, filteredDataFrame.getRowValues(0).get(1));
         assertEquals("Lebanon", filteredDataFrame.getRowValues(0).get(2));
@@ -383,6 +384,7 @@ public class DataFrameTest {
 
         DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, filterValues);
 
+        assertEquals(filteredDataFrame.getRows().size(), 2);
         assertEquals("Jorane", filteredDataFrame.getRowValues(0).get(0));
         assertEquals(23, filteredDataFrame.getRowValues(0).get(1));
         assertEquals("France", filteredDataFrame.getRowValues(0).get(2));
