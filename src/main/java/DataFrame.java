@@ -89,6 +89,16 @@ public class DataFrame {
     }
 
     /**
+     * Constructs a DataFrame from a csv file and a delimiter.
+     *
+     * @param filepath The path to the csv file.
+     * @param delimiter The Delimiter to split the csv columns.
+     */
+    public DataFrame(String filepath, String delimiter) {
+        this(new CSVReader(filepath, delimiter).allLines());
+    }
+
+    /**
      * Returns a list of column labels in the DataFrame.
      *
      * @return An ArrayList containing the column labels.

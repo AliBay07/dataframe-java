@@ -154,4 +154,31 @@ public class DataFrameTest {
         assertEquals("France", df.getColumnValues("Country").get(3));
     }
 
+    @Test
+    public void testCSVConstructorWithValidFile() {
+        String pathtoFile = "src/test/sample/test.csv";
+        String delimiter = ",";
+        DataFrame df = new DataFrame(pathtoFile, delimiter);
+
+        assertEquals("Name", df.getColumnLabels().get(0));
+        assertEquals("Age", df.getColumnLabels().get(1));
+        assertEquals("Country", df.getColumnLabels().get(2));
+
+        assertEquals("Ali", df.getColumnValues("Name").get(0));
+        assertEquals(21, df.getColumnValues("Age").get(0));
+        assertEquals("Lebanon", df.getColumnValues("Country").get(0));
+
+        assertEquals("Serge", df.getColumnValues("Name").get(1));
+        assertEquals(24, df.getColumnValues("Age").get(1));
+        assertEquals("Armenia", df.getColumnValues("Country").get(1));
+
+        assertEquals("Jorane", df.getColumnValues("Name").get(2));
+        assertEquals(23, df.getColumnValues("Age").get(2));
+        assertEquals("France", df.getColumnValues("Country").get(2));
+
+        assertEquals("Noemie", df.getColumnValues("Name").get(3));
+        assertEquals(23, df.getColumnValues("Age").get(3));
+        assertEquals("France", df.getColumnValues("Country").get(3));
+    }
+
 }
