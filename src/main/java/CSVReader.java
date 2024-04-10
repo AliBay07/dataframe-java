@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class CSVReader {
     private String filename;
     private Scanner sc;
-    private String delimiter = ";";
+    private String delimiter = ",";
 
     /**
      * Constructs a CSVReader object to read from the specified file with the default delimiter.
