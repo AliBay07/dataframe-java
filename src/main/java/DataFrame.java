@@ -1,10 +1,8 @@
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.lang.reflect.Array;
+
 public class DataFrame {
 
     private final Hashtable<String, Object[]> columns;
@@ -118,17 +116,9 @@ public class DataFrame {
         Object[] columnData = columns.get(columnName);
         ArrayList<Object> columnValues = new ArrayList<>();
 
-        for (Object rowData : columnData) {
-            columnValues.add(rowData);
-        }
+        Collections.addAll(columnValues, columnData);
 
         return columnValues;
-    }
-    public Object[] getColumnValuesArray(String columnName) {
-        if (!columns.containsKey(columnName)) {
-            throw new IllegalArgumentException("Column with label " + columnName + " does not exist.");
-        }
-        return columns.get(columnName);
     }
 
     /**
@@ -300,7 +290,7 @@ public class DataFrame {
         int i = 0;
         int j = 0;
         for(String l : lab){
-            if(labels.contains(l) == false){
+            if(!labels.contains(l)){
                 throw new IllegalArgumentException("Invalid input data : column "+l+" is not in DataFrame");
             }
             Object[] col = columns.get(l);
