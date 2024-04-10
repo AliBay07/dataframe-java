@@ -212,9 +212,9 @@ public class DataFrameTest {
         df.loc(columnsLabels2);
     }
     @Test (expected = java.lang.IllegalArgumentException.class)
-    public void testLocWithIndexInvalide(){
+    public void testLocWithIndexInvalide2(){
         String[] columnsLabels2 = {};
-        df.loc(columnsLabels);
+        df.loc(columnsLabels2);
     }
 
 }
