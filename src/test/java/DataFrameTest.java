@@ -356,4 +356,73 @@ public class DataFrameTest {
         assertArrayEquals(sdExcepted,df.sd(df.moyenne()));
     }
 
+    @Test
+    public void testFilterReturningOneValue() {
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Name");
+        columnNames.add("Age");
+
+        ArrayList<Object> filterValues = new ArrayList<>();
+        filterValues.add("Ali");
+        filterValues.add(21);
+
+        DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, filterValues);
+
+        assertEquals("Ali", filteredDataFrame.getRowValues(0).get(0));
+        assertEquals(21, filteredDataFrame.getRowValues(0).get(1));
+        assertEquals("Lebanon", filteredDataFrame.getRowValues(0).get(2));
+    }
+
+    @Test
+    public void testFilterReturningMultipleValues() {
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Age");
+
+        ArrayList<Object> filterValues = new ArrayList<>();
+        filterValues.add(23);
+
+        DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, filterValues);
+
+        assertEquals("Jorane", filteredDataFrame.getRowValues(0).get(0));
+        assertEquals(23, filteredDataFrame.getRowValues(0).get(1));
+        assertEquals("France", filteredDataFrame.getRowValues(0).get(2));
+        assertEquals("Noemie", filteredDataFrame.getRowValues(1).get(0));
+        assertEquals(23, filteredDataFrame.getRowValues(1).get(1));
+        assertEquals("France", filteredDataFrame.getRowValues(1).get(2));
+    }
+
+    @Test
+    public void testFilterReturningNoValue() {
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Age");
+
+        ArrayList<Object> filterValues = new ArrayList<>();
+        filterValues.add(60);
+
+        DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, filterValues);
+
+        assertNull(filteredDataFrame.getRowValues(0).get(0));
+        assertNull(filteredDataFrame.getRowValues(0).get(1));
+        assertNull(filteredDataFrame.getRowValues(0).get(2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFilterWithInvalidColumnName() {
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("unknown-column");
+
+        ArrayList<Object> filterValues = new ArrayList<>();
+        filterValues.add(9999);
+
+        DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, filterValues);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFilterWithInvalidColumnAndRows() {
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("unknown-column");
+
+        DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, new ArrayList<>());
+    }
+
 }

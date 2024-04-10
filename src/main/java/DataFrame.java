@@ -301,8 +301,56 @@ public class DataFrame {
             }
             i++;
         }
-        DataFrame df = new DataFrame(lab, res);
-        return df;
+        return new DataFrame(lab, res);
+    }
+
+    /**
+     * Filters the DataFrame based on given column names and filter values.
+     *
+     * @param columnNames The list of column names to filter on.
+     * @param filterValues The list of filter values corresponding to each column.
+     * @return A new DataFrame containing only the rows that match the filters.
+     * @throws IllegalArgumentException if the number of column names and filter values don't match.
+     */
+    public DataFrame filter(ArrayList<String> columnNames, ArrayList<Object> filterValues) {
+        if (columnNames.size() != filterValues.size()) {
+            throw new IllegalArgumentException("Number of column names and filter values must be the same.");
+        }
+
+        ArrayList<Object[]> filteredRows = new ArrayList<>();
+
+        for (Object[] row : rows) {
+            boolean match = true;
+
+            for (int i = 0; i < columnNames.size(); i++) {
+                String columnName = columnNames.get(i);
+                Object filterValue = filterValues.get(i);
+                if (!columns.containsKey(columnName)) {
+                    throw new IllegalArgumentException("Column " + columnName + " does not exist.");
+                }
+
+                Object cellValue = row[labels.indexOf(columnName)];
+
+                if (!filterValue.equals(cellValue)) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                filteredRows.add(row);
+            }
+        }
+
+        if (filteredRows.isEmpty()) {
+            Object[][] nullRow = new Object[1][labels.size()];
+            Arrays.fill(nullRow[0], null);
+            return new DataFrame((String[]) getLabels(), nullRow);
+        } else {
+            Object[][] filteredData = new Object[filteredRows.size()][];
+            filteredData = filteredRows.toArray(filteredData);
+            return new DataFrame((String[]) getLabels(), filteredData);
+        }
     }
 
     /**
