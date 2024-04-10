@@ -1,15 +1,18 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import java.io.FileNotFoundException;
+import java.lang.module.FindException;
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class DataFrameTest {
 
-    private DataFrame df;
+    private DataFrame dfOneParam;
+    private DataFrame dfTwoParams;
+    private DataFrame dfCSVOneParam;
+    private DataFrame dfCSVTwoParams;
 
     @Before
     public void setUp() {
@@ -20,7 +23,20 @@ public class DataFrameTest {
                 {"Jorane", 23, "France"},
                 {"Noemie", 23, "France"}
         };
-        df = new DataFrame(columnsLabels, rowsValues);
+        dfTwoParams = new DataFrame(columnsLabels, rowsValues);
+        Object[][] data = {
+                {"Name", "Age", "Country"},
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"},
+                {"Noemie", 23, "France"}
+        };
+        dfOneParam = new DataFrame(data);
+
+        String pathToFile = "src/test/sample/test.csv";
+        String delimiter = ",";
+        dfCSVOneParam = new DataFrame(pathToFile);
+        dfCSVTwoParams = new DataFrame(pathToFile, delimiter);
     }
 
     @Test
@@ -30,12 +46,12 @@ public class DataFrameTest {
         expectedRowValues.add(24);
         expectedRowValues.add("Armenia");
 
-        assertEquals(expectedRowValues, df.getRowValues(1));
+        assertEquals(expectedRowValues, dfTwoParams.getRowValues(1));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetRowValuesWithInvalidIndex() {
-        df.getRowValues(10);
+        dfTwoParams.getRowValues(10);
     }
 
     @Test
@@ -45,7 +61,7 @@ public class DataFrameTest {
         expectedColumnLabels.add("Age");
         expectedColumnLabels.add("Country");
 
-        assertEquals(expectedColumnLabels, df.getColumnLabels());
+        assertEquals(expectedColumnLabels, dfTwoParams.getColumnLabels());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -62,25 +78,25 @@ public class DataFrameTest {
 
     @Test
     public void testConstructorWithValidData() {
-        assertEquals("Name", df.getColumnLabels().get(0));
-        assertEquals("Age", df.getColumnLabels().get(1));
-        assertEquals("Country", df.getColumnLabels().get(2));
+        assertEquals("Name", dfOneParam.getColumnLabels().get(0));
+        assertEquals("Age", dfOneParam.getColumnLabels().get(1));
+        assertEquals("Country", dfOneParam.getColumnLabels().get(2));
 
-        assertEquals("Ali", df.getColumnValues("Name").get(0));
-        assertEquals(21, df.getColumnValues("Age").get(0));
-        assertEquals("Lebanon", df.getColumnValues("Country").get(0));
+        assertEquals("Ali", dfOneParam.getColumnValues("Name").get(0));
+        assertEquals(21, dfOneParam.getColumnValues("Age").get(0));
+        assertEquals("Lebanon", dfOneParam.getColumnValues("Country").get(0));
 
-        assertEquals("Serge", df.getColumnValues("Name").get(1));
-        assertEquals(24, df.getColumnValues("Age").get(1));
-        assertEquals("Armenia", df.getColumnValues("Country").get(1));
+        assertEquals("Serge", dfOneParam.getColumnValues("Name").get(1));
+        assertEquals(24, dfOneParam.getColumnValues("Age").get(1));
+        assertEquals("Armenia", dfOneParam.getColumnValues("Country").get(1));
 
-        assertEquals("Jorane", df.getColumnValues("Name").get(2));
-        assertEquals(23, df.getColumnValues("Age").get(2));
-        assertEquals("France", df.getColumnValues("Country").get(2));
+        assertEquals("Jorane", dfOneParam.getColumnValues("Name").get(2));
+        assertEquals(23, dfOneParam.getColumnValues("Age").get(2));
+        assertEquals("France", dfOneParam.getColumnValues("Country").get(2));
 
-        assertEquals("Noemie", df.getColumnValues("Name").get(3));
-        assertEquals(23, df.getColumnValues("Age").get(3));
-        assertEquals("France", df.getColumnValues("Country").get(3));
+        assertEquals("Noemie", dfOneParam.getColumnValues("Name").get(3));
+        assertEquals(23, dfOneParam.getColumnValues("Age").get(3));
+        assertEquals("France", dfOneParam.getColumnValues("Country").get(3));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -104,41 +120,107 @@ public class DataFrameTest {
 
     @Test
     public void testConstructor2ParametersWithValidData() {
-        assertEquals("Name", df.getColumnLabels().get(0));
-        assertEquals("Age", df.getColumnLabels().get(1));
-        assertEquals("Country", df.getColumnLabels().get(2));
+        assertEquals("Name", dfTwoParams.getColumnLabels().get(0));
+        assertEquals("Age", dfTwoParams.getColumnLabels().get(1));
+        assertEquals("Country", dfTwoParams.getColumnLabels().get(2));
 
-        assertEquals("Ali", df.getColumnValues("Name").get(0));
-        assertEquals(21, df.getColumnValues("Age").get(0));
-        assertEquals("Lebanon", df.getColumnValues("Country").get(0));
+        assertEquals("Ali", dfTwoParams.getColumnValues("Name").get(0));
+        assertEquals(21, dfTwoParams.getColumnValues("Age").get(0));
+        assertEquals("Lebanon", dfTwoParams.getColumnValues("Country").get(0));
 
-        assertEquals("Serge", df.getColumnValues("Name").get(1));
-        assertEquals(24, df.getColumnValues("Age").get(1));
-        assertEquals("Armenia", df.getColumnValues("Country").get(1));
+        assertEquals("Serge", dfTwoParams.getColumnValues("Name").get(1));
+        assertEquals(24, dfTwoParams.getColumnValues("Age").get(1));
+        assertEquals("Armenia", dfTwoParams.getColumnValues("Country").get(1));
 
-        assertEquals("Jorane", df.getColumnValues("Name").get(2));
-        assertEquals(23, df.getColumnValues("Age").get(2));
-        assertEquals("France", df.getColumnValues("Country").get(2));
+        assertEquals("Jorane", dfTwoParams.getColumnValues("Name").get(2));
+        assertEquals(23, dfTwoParams.getColumnValues("Age").get(2));
+        assertEquals("France", dfTwoParams.getColumnValues("Country").get(2));
 
-        assertEquals("Noemie", df.getColumnValues("Name").get(3));
-        assertEquals(23, df.getColumnValues("Age").get(3));
-        assertEquals("France", df.getColumnValues("Country").get(3));
+        assertEquals("Noemie", dfTwoParams.getColumnValues("Name").get(3));
+        assertEquals(23, dfTwoParams.getColumnValues("Age").get(3));
+        assertEquals("France", dfTwoParams.getColumnValues("Country").get(3));
+    }
+
+    @Test
+    public void testCSVConstructorWithDelimiterWithValidFile() {
+        String pathtoFile = "src/test/sample/test.csv";
+        String delimiter = ",";
+        DataFrame df = new DataFrame(pathtoFile, delimiter);
+
+        assertEquals("Name", dfCSVTwoParams.getColumnLabels().get(0));
+        assertEquals("Age", dfCSVTwoParams.getColumnLabels().get(1));
+        assertEquals("Country", dfCSVTwoParams.getColumnLabels().get(2));
+
+        assertEquals("Ali", dfCSVTwoParams.getColumnValues("Name").get(0));
+        assertEquals(21, dfCSVTwoParams.getColumnValues("Age").get(0));
+        assertEquals("Lebanon", dfCSVTwoParams.getColumnValues("Country").get(0));
+
+        assertEquals("Serge", dfCSVTwoParams.getColumnValues("Name").get(1));
+        assertEquals(24, dfCSVTwoParams.getColumnValues("Age").get(1));
+        assertEquals("Armenia", dfCSVTwoParams.getColumnValues("Country").get(1));
+
+        assertEquals("Jorane", dfCSVTwoParams.getColumnValues("Name").get(2));
+        assertEquals(23, dfCSVTwoParams.getColumnValues("Age").get(2));
+        assertEquals("France", dfCSVTwoParams.getColumnValues("Country").get(2));
+
+        assertEquals("Noemie", dfCSVTwoParams.getColumnValues("Name").get(3));
+        assertEquals(23, dfCSVTwoParams.getColumnValues("Age").get(3));
+        assertEquals("France", dfCSVTwoParams.getColumnValues("Country").get(3));
+    }
+
+    @Test
+    public void testCSVConstructorWithoutDelimiterWithValidFile() {
+        String pathtoFile = "src/test/sample/test.csv";
+        DataFrame df = new DataFrame(pathtoFile);
+
+        assertEquals("Name", dfCSVOneParam.getColumnLabels().get(0));
+        assertEquals("Age", dfCSVOneParam.getColumnLabels().get(1));
+        assertEquals("Country", dfCSVOneParam.getColumnLabels().get(2));
+
+        assertEquals("Ali", dfCSVOneParam.getColumnValues("Name").get(0));
+        assertEquals(21, dfCSVOneParam.getColumnValues("Age").get(0));
+        assertEquals("Lebanon", dfCSVOneParam.getColumnValues("Country").get(0));
+
+        assertEquals("Serge", dfCSVOneParam.getColumnValues("Name").get(1));
+        assertEquals(24, dfCSVOneParam.getColumnValues("Age").get(1));
+        assertEquals("Armenia", dfCSVOneParam.getColumnValues("Country").get(1));
+
+        assertEquals("Jorane", dfCSVOneParam.getColumnValues("Name").get(2));
+        assertEquals(23, dfCSVOneParam.getColumnValues("Age").get(2));
+        assertEquals("France", dfCSVOneParam.getColumnValues("Country").get(2));
+
+        assertEquals("Noemie", dfCSVOneParam.getColumnValues("Name").get(3));
+        assertEquals(23, dfCSVOneParam.getColumnValues("Age").get(3));
+        assertEquals("France", dfCSVOneParam.getColumnValues("Country").get(3));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testCSVConstructorWithDelimiterWithInvalidFile() {
+        String pathtoFile = "src/test/sample/unknown.csv";
+        String delimiter = ",";
+        DataFrame df = new DataFrame(pathtoFile, delimiter);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testCSVConstructorWithoutDelimiterWithInvalidFile() {
+        String pathtoFile = "src/test/sample/unknown.csv";
+        DataFrame df = new DataFrame(pathtoFile);
     }
 
     @Test
     public void testGetLabel(){
-        assertEquals("Name",df.getLabel(0));
+        assertEquals("Name",dfOneParam.getLabel(0));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetLabelWithInvalidIndex(){
         int[] i={0};
-        df.iloc(i);
+        dfOneParam.iloc(i);
 
-        String er = df.getLabel(12);
+        String er = dfOneParam.getLabel(12);
     }
 
-
+    @Test
     public void testEquals() {
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
@@ -159,14 +241,14 @@ public class DataFrameTest {
         DataFrame df3 = new DataFrame(columnsLabels3, rowsValues3);
 
         // Testing equality
-        assertTrue(df.equals(df2));
-        assertTrue(df2.equals(df));
+        assertEquals(dfOneParam, df2);
+        assertEquals(df2, dfOneParam);
 
         // Testing inequality
-        assertFalse(df.equals(df3));
-        assertFalse(df2.equals(df3));
-        assertFalse(df3.equals(df));
-        assertFalse(df3.equals(df2));
+        assertNotEquals(dfOneParam, df3);
+        assertNotEquals(df2, df3);
+        assertNotEquals(df3, dfOneParam);
+        assertNotEquals(df3, df2);
     }
 
     @Test
@@ -177,8 +259,8 @@ public class DataFrameTest {
         };
         DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
         int[] i={0};
-        DataFrame df3 = df.iloc(i);
-        assertTrue(df3.equals(df2));
+        DataFrame df3 = dfOneParam.iloc(i);
+        assertEquals(df3, df2);
     }
 
     @Test (expected = IndexOutOfBoundsException.class)
@@ -189,7 +271,7 @@ public class DataFrameTest {
         };
         DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
         int[] i={4};
-        DataFrame df3 = df.iloc(i);
+        DataFrame df3 = dfOneParam.iloc(i);
     }
 
     @Test
@@ -203,18 +285,18 @@ public class DataFrameTest {
         };
         DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
         String[] i={"Name","Age"};
-        assertTrue(df2.equals(df.loc(i)));
+        assertEquals(df2, dfOneParam.loc(i));
     }
 
     @Test (expected = java.lang.IllegalArgumentException.class)
     public void testLocWithIndexInvalide(){
         String[] columnsLabels2 = {"Sexe"};
-        df.loc(columnsLabels2);
+        dfOneParam.loc(columnsLabels2);
     }
     @Test (expected = java.lang.IllegalArgumentException.class)
     public void testLocWithIndexInvalide2(){
         String[] columnsLabels2 = {};
-        df.loc(columnsLabels2);
+        dfOneParam.loc(columnsLabels2);
     }
 
 }

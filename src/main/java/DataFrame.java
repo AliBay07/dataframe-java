@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,6 +73,25 @@ public class DataFrame {
             }
             columns.put(columnLabel, columnData);
         }
+    }
+
+    /**
+     * Constructs a DataFrame from a csv file.
+     *
+     * @param filepath The path to the csv file.
+     */
+    public DataFrame(String filepath) {
+        this(new CSVReader(filepath).allLines());
+    }
+
+    /**
+     * Constructs a DataFrame from a csv file and a delimiter.
+     *
+     * @param filepath The path to the csv file.
+     * @param delimiter The Delimiter to split the csv columns.
+     */
+    public DataFrame(String filepath, String delimiter) {
+        this(new CSVReader(filepath, delimiter).allLines());
     }
 
     /**
