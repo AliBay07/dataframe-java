@@ -335,5 +335,166 @@ public class DataFrame {
         return true;
     }
 
+     /**
+     * Calculates the mean (average) of numerical values in each column of the DataFrame.
+     * If a column contains non-numerical values or is empty, the mean value for that column is considered null.
+     * @return An array containing the mean values for each column in the DataFrame.
+     **/
+    public Object[] moyenne(){
+        int i = 0;
+        Object[] tab = new Object[labels.size()];
+        for (String s : this.labels) {
+            Object[] row = this.columns.get(s);
+            if (row.length > 0 && row[0] instanceof Number) {
+                double sum = 0.0;
+                int compteur = 0;
+                for(Object n : row) {
+                    if(n != null) {
+                        sum = sum + ((Number) n).doubleValue();
+                    }
+                    else
+                        compteur ++;
+                }
+                tab[i] = (double) sum / (row.length - compteur);
+            } else {
+                tab[i] = null;
+            }
+            i++;
+        }
+        return tab;
+    }
+
+    /**
+     * Counts the non-null elements in each column of the DataFrame.
+     * @return An array containing the count of non-null elements for each column in the DataFrame.
+     **/
+    public Integer[] count(){
+        Integer[] tab = new Integer[labels.size()];
+        int i = 0 ;
+        for(String l : labels){
+            int compteur = columns.get(l).length;
+            for(Object c : columns.get(l)){
+                if(c == null){
+                    compteur--;
+                }
+            }
+            tab[i]=compteur;
+            i++;
+        }
+        return tab;
+    }
+
+    /**
+     * Finds the minimum and maximum values in each numerical column of the DataFrame.
+     * If a column contains non-numerical values, the minimum and maximum values for that column are considered null.$
+     * @return A 2D array where the first row contains the minimum values and the second row contains the maximum values
+     **/
+    public Object[][] minEtMax(){
+        Object[] min = new Object[labels.size()];
+        Object[] max = new Object[labels.size()];
+        int i = 0 ;
+        for(String l : labels){
+            if(columns.get(l)[0] instanceof Number) {
+                double maxVal = Integer.MIN_VALUE;
+                double minVal = Integer.MAX_VALUE;
+                for(int j = 0; j < columns.get(l).length; j++){
+                    if (((Number) columns.get(l)[j]).doubleValue() > maxVal)
+                        maxVal = ((Number) columns.get(l)[j]).doubleValue();
+                    if (((Number) columns.get(l)[j]).doubleValue() < minVal)
+                        minVal = ((Number) columns.get(l)[j]).doubleValue();
+
+                }
+                min[i]=minVal;
+                max[i]=maxVal;
+            }
+            else{
+                min[i]=null;
+                max[i]=null;
+            }
+            i++;
+        }
+        return new Object[][]{
+                min,
+                max
+        };
+    }
+
+    /**
+     * Calculates the standard deviation of numerical values in each column of the DataFrame based on the provided means.
+     * If a column contains non-numerical values, the standard deviation for that column is considered null.
+     * @param mean An array containing the mean values for each column in the DataFrame.
+     * @return An array containing the standard deviation values for each column in the DataFrame.
+     */
+    public Object[] sd(Object[] mean){
+        Object[] sd = new Object[labels.size()];
+        int i = 0;
+        for(String l : labels){
+            double res=0;
+            if(columns.get(l)[0] instanceof Number) {
+                for(int j = 0; j < columns.get(l).length; j++) {
+                    double cal = (((Number) columns.get(l)[j]).doubleValue() - ((Number) mean[i]).doubleValue());
+                    res = res + cal * cal;
+                }
+                sd[i] = (double) Math.sqrt((double) 1 / columns.get(l).length * res);
+            }
+            else{
+                sd[i] = null;
+            }
+            i++;
+        }
+        return sd;
+    }
+
+    /**
+     * Generates a summary of the DataFrame, including count, mean, minimum, maximum, and standard deviation for each column.
+     **/
+    public void describe(){
+        Object[] moy = moyenne();
+        Integer[] count = count();
+        Object[][] minmax = minEtMax();
+        Object[] sd = sd(moy);
+
+        System.out.printf("%-12s", "");
+        for (String label : labels) {
+            System.out.printf("%-10s", label);
+            System.out.printf("%-2s", "");
+        }
+        System.out.println();
+        System.out.printf("%-10s", "Count");
+        System.out.printf("| ");
+        for(int i : count){
+            System.out.printf("%-10s", i);
+            System.out.printf("%-2s", "");
+        }
+        System.out.println();
+        System.out.printf("%-10s", "Mean");
+        System.out.printf("| ");
+        for(Object m : moy){
+            System.out.printf("%-10s", m);
+            System.out.printf("%-2s", "");
+        }
+        System.out.println();
+        System.out.printf("%-10s", "Min");
+        System.out.printf("| ");
+        for(Object min : minmax[0]){
+            System.out.printf("%-10s", min);
+            System.out.printf("%-2s", "");
+        }
+        System.out.println();
+        System.out.printf("%-10s", "Max");
+        System.out.printf("| ");
+        for(Object max : minmax[1]){
+            System.out.printf("%-10s", max);
+            System.out.printf("%-2s", "");
+        }
+        System.out.println();
+        System.out.printf("%-10s", "Ecart-Type");
+        System.out.printf("| ");
+        for(Object e : sd){
+            System.out.printf("%-10s", e);
+            System.out.printf("%-2s", "");
+        }
+
+    }
 
 }

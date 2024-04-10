@@ -297,4 +297,63 @@ public class DataFrameTest {
         dfOneParam.loc(columnsLabels2);
     }
 
+    @Test
+    public void testMean(){
+        Object[] meanExcepted = {null, 22.75, null};
+        assertArrayEquals(meanExcepted, dfOneParam.moyenne());
+    }
+    @Test
+    public void testMeanWithNullValue(){
+        String[] lab = {"Name","Age"};
+        Object[][] data = {
+                {"Ali", 21},
+                {"Noa", 22},
+                {"Val", null},
+        };
+        DataFrame df2 = new DataFrame(lab, data);
+        Object[] meanExcepted = {null, 21.5};
+        assertArrayEquals(meanExcepted, df2.moyenne());
+    }
+
+    @Test
+    public void testCount(){
+        Object[] countExcepted = {4,4,4};
+        assertArrayEquals(countExcepted, dfOneParam.count());
+    }
+
+    @Test
+    public void testCountWithNullValue(){
+        String[] lab = {"Name","Sexe"};
+        Object[][] data = {
+                {"Ali", "Homme"},
+                {"Noa", "Homme"},
+                {"Val", null},
+        };
+        DataFrame df2 = new DataFrame(lab, data);
+        Object[] countExcepted = {3, 2};
+        assertArrayEquals(countExcepted, df2.count());
+    }
+
+    @Test
+    public void testMinEtMax(){
+        Object[][] minMaxExcepted = {
+                {null, 21.0, null},
+                {null, 24.0, null}
+        };
+        assertArrayEquals(minMaxExcepted, dfOneParam.minEtMax());
+    }
+
+    @Test
+    public void testStudentDeviation(){
+        String[] lab = {"Age", "Nombre Enfant"};
+        Object[][] data = {
+                {20,0},
+                {26,3},
+                {30,1}
+        };
+        DataFrame df = new DataFrame(lab,data);
+        Object[] sdExcepted = {4.109609335312651, 1.247219128924647};
+        assertArrayEquals(sdExcepted,df.sd(df.moyenne()));
+    }
+
 }
