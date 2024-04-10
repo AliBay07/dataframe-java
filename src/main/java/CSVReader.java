@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CSVReader {
@@ -17,6 +18,7 @@ public class CSVReader {
         this.filename = filename;
         try {
             this.sc = new Scanner(new File(filename));
+            this.sc.useDelimiter("\\n");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -41,21 +43,24 @@ public class CSVReader {
     public Object[] nextLine() {
         if (!this.sc.hasNext())
             return new Object[]{};
-        Object[] res = sc.next().split(this.delimiter);
+        String[] str = sc.next().split(this.delimiter);
+        Object[] res = new Object[str.length];
 
         // Iterate over the split array
-        for (int i = 0; i < res.length; i++) {
+        for (int i = 0; i < str.length; i++) {
             // Check if the value is an integer and convert if so
             try {
-                int intValue = Integer.parseInt((String) (res[i]));
+                Integer intValue = Integer.parseInt((str[i]));
                 res[i] = intValue;
-            } catch (NumberFormatException e) {}
-
-            // Check if the value is a double and convert if so
-            try {
-                double doubleValue = Double.parseDouble((String) res[i]);
-                res[i] = doubleValue;
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e1) {
+                // Check if the value is a double and convert if so
+                try {
+                    Double doubleValue = Double.parseDouble((String) str[i]);
+                    res[i] = doubleValue;
+                } catch (NumberFormatException e2) {
+                    res[i] = str[i];
+                }
+            }
             // In case it is a string, nothing will be done, as it is already read as strings from the file
         }
         return res;
