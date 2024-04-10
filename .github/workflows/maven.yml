@@ -18,11 +18,12 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+      - name: Maven Dependency Tree Dependency Submission
+      uses: advanced-security/maven-dependency-submission-action@v4.0.2
+      run: maven-dependency-submission -d ../..
+
     - name: Build with Maven
       run: mvn -B compile --file pom.xml
 
     - name: Run Tests
       run: mvn -B test --file pom.xml
-
-    - name: Maven Dependency Tree Dependency Submission
-      uses: advanced-security/maven-dependency-submission-action@v4.0.2
