@@ -1,7 +1,8 @@
 # Projet Dataframe en Java
-| [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java) |
-|------------|
-|  [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/ci.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions)[![codecov](https://codecov.io/gh/AliBay07/dataframe-java/branch/main/graph/badge.svg)](https://codecov.io/gh/AliBay07/dataframe-java) |
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java) 
+[![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml) 
+[![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml) 
+[![Google Cloud](https://img.shields.io/badge/Google%20Cloud-My%20Resource-blue?logo=google-cloud)](http:35.222.62.82)
 
 
 
