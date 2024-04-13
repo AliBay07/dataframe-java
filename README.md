@@ -1,8 +1,12 @@
 # Projet Dataframe en Java
 
-[![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/ci.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions)
+|------------|--------------------|
+| Github   | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java) |
+|------------|--------------------|
+| Couverture de code | [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/ci.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions)
+[![codecov](https://codecov.io/gh/AliBay07/dataframe-java/branch/main/graph/badge.svg)](https://codecov.io/gh/AliBay07/dataframe-java) |
 
-[![codecov](https://codecov.io/gh/AliBay07/dataframe-java/branch/main/graph/badge.svg)](https://codecov.io/gh/AliBay07/dataframe-java)
+
 
 
 Ce projet vise à fournir une implémentation en Java équivalente au DataFrame de la bibliothèque pandas en Python.
