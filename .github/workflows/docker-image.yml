@@ -27,4 +27,4 @@ jobs:
         docker tag dataframe-java:latest alibay07/dataframe-java:$COMMIT_SHA
         
     - name: Push Docker image to Docker Hub
-      run: docker push alibay07/dataframe-java:latest
+      run: docker push alibay07/dataframe-java:$COMMIT_SHA
