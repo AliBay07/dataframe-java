@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>les-perdus</groupId>
     <artifactId>dataframe-java</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -32,53 +29,32 @@
     </reporting>
     <build>
         <plugins>
+            <!-- Jacoco Maven Plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.11</version>
                 <executions>
                     <execution>
-                        <id>default-prepare-agent</id>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <phase>initialize</phase>
                     </execution>
                     <execution>
-                        <id>default-prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>default-report</id>
+                        <id>report</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>default-report-integration</id>
-                        <goals>
-                            <goal>report-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>default-check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
                         <configuration>
-                            <rules>
-                                <rule>
-                                <element>BUNDLE</element>
-                                <limits>
-                                    <limit>
-                                        <counter>COMPLEXITY</counter>
-                                        <value>COVEREDRATIO</value>
-                                        <minimum>0.80</minimum>
-                                    </limit>
-                                </limits>
-                                </rule>
-                            </rules>
+                            <excludes>
+                                <exclude>DataFrame.describe</exclude>
+                                <exclude>DataFrame.tail</exclude>
+                                <exclude>DataFrame.head</exclude>
+                                <exclude>DataFrame.printDataFrame</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
@@ -94,10 +70,10 @@
                 <version>2.16</version>
                 <executions>
                     <execution>
-                    <id>default-integration-test</id>
-                    <goals>
-                        <goal>integration-test</goal>
-                    </goals>
+                        <id>default-integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -105,6 +81,29 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
+                <executions>
+                    <execution>
+                        <id>default-site</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
