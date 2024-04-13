@@ -23,8 +23,7 @@ jobs:
         
     - name: Tag Docker image
       run: |
-        COMMIT_SHA=$(git rev-parse --short HEAD)
-        docker tag dataframe-java:$(date +%s) alibay07/dataframe-java:$COMMIT_SHA
+        docker tag dataframe-java:latest alibay07/dataframe-java:latest
         
     - name: Push Docker image to Docker Hub
-      run: docker push alibay07/dataframe-java:$COMMIT_SHA
+      run: docker push alibay07/dataframe-java:latest
