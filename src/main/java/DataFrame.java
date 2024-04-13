@@ -555,4 +555,82 @@ public class DataFrame {
 
     }
 
+    public DataFrame groupby(String label, String option) {
+        ArrayList<Object> ordre = new ArrayList<>();
+        Hashtable<Object, ArrayList<Integer>> group = new Hashtable<>();
+        //Rempli la hashtable avec Object du groupe et les index a regrouper pour les autres colonnes
+        int i = 0;
+        for(Object o: columns.get(label)){
+            ArrayList<Integer> idx;
+            if(ordre.contains(o)){
+                idx = group.get(o);
+                idx.add(i);
+            }
+            else{
+                ordre.add(o);
+                idx = new ArrayList<>();
+                idx.add(i);
+            }
+            group.put(o, idx);
+            i++;
+        }
+        
+        Object[][] res = new Object[ordre.size()][];
+        String[] newlabels = new String[labels.size()];
+        int z = 0;
+        for(Object o: ordre){
+            Object[] ligne = new Object[labels.size()];
+            ligne[0] = o;
+            newlabels[0] = label;
+            int k = 1;
+            for(String lab : labels){
+                if(!lab.equals(label) && (columns.get(lab)[0] instanceof Number)){
+                    Object[] actualCol = new Object[group.get(o).size()];
+                    int j = 0;
+                    for(int idx : group.get(o)){
+                        actualCol[j] = columns.get(lab)[idx];
+                        j++;
+                    }
+                    if(option == "mean"){
+                        ligne[k] = meanForGroupBy(actualCol);
+                    }
+                    else if(option == "sum"){
+                        ligne[k] = sumForGroupBy(actualCol);
+                    }
+                    else{
+                        throw new IllegalArgumentException("L'option choisie en second parametre doit etre soit \"mean\" soit \"sum\".");
+                    }
+                    newlabels[k] = lab;
+                    k++;
+                }
+            }
+            res[z] = ligne ;
+            z++;
+        }
+        return new DataFrame(newlabels,res);
+    }
+
+    public static double meanForGroupBy(Object[] nb){
+        double res = 0;
+        for(Object n : nb){
+            if(n instanceof Integer){
+                double d = (Integer) n;
+                res = res + d;
+            }
+        }
+        return res / nb.length;
+    }
+
+    public static double sumForGroupBy(Object[] nb){
+        double res = 0;
+        for(Object n : nb){
+            if(n instanceof Integer){
+                double d = (Integer) n;
+                res = res + d;
+            }
+        }
+        return res;
+    }
+
+
 }

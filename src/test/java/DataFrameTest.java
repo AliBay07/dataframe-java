@@ -427,4 +427,68 @@ public class DataFrameTest {
         DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, new ArrayList<>());
     }
 
+    @Test
+    public void testGroupMeanByWithValidData(){
+        String[] labels = {"Age", "Number of Kids", "Country"};
+        Object[][] data = {
+            {20, 0, "France"},
+            {36, 2, "Espage"},
+            {30, 4, "Suisse"},
+            {33, 1, "France"},
+            {25, 0, "France"},
+            {22, 2, "Suisse"},
+            {27, 4, "France"},
+            {22, 2, "France"},
+            {41, 0, "Suisse"},
+            {30, 1, "Espage"},
+        };
+        
+        DataFrame df = new DataFrame(labels, data);
+
+        String[] labelsExcepted = {"Country", "Age", "Number of Kids"};
+        Object[][] dataExcepted = {
+            {"France", 25.4, 1.4},
+            {"Espage", 33.0, 1.5},
+            {"Suisse", 31.0, 2.0}
+        };
+        
+        DataFrame dfExcepted = new DataFrame(labelsExcepted, dataExcepted);
+        assertEquals(df.groupby("Country", "mean"), dfExcepted);
+    }
+
+    @Test
+    public void testGroupSumByWithValidData(){
+        String[] labels = {"Age", "Number of Kids", "Country"};
+        Object[][] data = {
+            {20, 0, "France"},
+            {36, 2, "Espage"},
+            {30, 4, "Suisse"},
+            {33, 1, "France"},
+            {25, 0, "France"},
+            {22, 2, "Suisse"},
+            {27, 4, "France"},
+            {22, 2, "France"},
+            {41, 0, "Suisse"},
+            {30, 1, "Espage"}
+        };
+        
+        DataFrame df = new DataFrame(labels, data);
+
+        String[] labelsExcepted = {"Country", "Age", "Number of Kids"};
+        Object[][] dataExcepted = {
+            {"France", 127.0, 7.0},
+            {"Espage", 66.0, 3.0},
+            {"Suisse", 93.0, 6.0}
+        };
+        
+        DataFrame dfExcepted = new DataFrame(labelsExcepted, dataExcepted);
+        assertEquals(df.groupby("Country", "sum"), dfExcepted);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGroupByWithInvalidData(){
+        dfOneParam.groupby("Country", "test");
+    }
+
 }
