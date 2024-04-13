@@ -9,6 +9,28 @@
 
 Ce projet vise à fournir une implémentation en Java équivalente au DataFrame de la bibliothèque pandas en Python.
 
+## Exécution des tests et construction du projet
+
+Pour compiler le projet, vous pouvez utiliser la commande suivante :
+```bash
+mvn compile
+```
+
+Pour exécuter les tests unitaires, vous pouvez utiliser la commande suivante :
+```bash
+mvn test
+```
+
+Pour nettoyer le projet, vous pouvez utiliser la commande suivante :
+```bash
+mvn clean
+```
+
+Pour générer le fichier JAR exécutable, vous pouvez utiliser la commande suivante :
+```bash
+mvn package
+```
+
 ## Fonctionnalités implémentées
 
 - **Affichage du DataFrame:** La classe DataFrame permet d'afficher les données du DataFrame.
