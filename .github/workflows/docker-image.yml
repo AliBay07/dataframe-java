@@ -21,10 +21,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         
-    - name: Tag Docker image
-      run: |
-        IMAGE_ID=$(docker images -q dataframe-java:latest)
-        docker tag $IMAGE_ID alibay07/dataframe-java:latest
-        
     - name: Push Docker image to Docker Hub
       run: docker push alibay07/dataframe-java:latest
