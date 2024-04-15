@@ -52,6 +52,11 @@ public class DataFrameTest {
         dfTwoParams.getRowValues(10);
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetRowValuesWithNegativeIndex() {
+        dfTwoParams.getRowValues(-10);
+    }
+
     @Test
     public void testGetColumnLabels() {
         ArrayList<String> expectedColumnLabels = new ArrayList<>();
@@ -205,6 +210,11 @@ public class DataFrameTest {
         DataFrame df = new DataFrame(pathtoFile);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetColumnValuesWithInvalidColumn(){
+        dfTwoParams.getColumnValues("unknown");
+    }
+
     @Test
     public void testGetLabel(){
         assertEquals("Name",dfOneParam.getLabel(0));
@@ -218,8 +228,16 @@ public class DataFrameTest {
         String er = dfOneParam.getLabel(12);
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetLabelWithNegativeIndex(){
+        int[] i={0};
+        dfOneParam.iloc(i);
+
+        String er = dfOneParam.getLabel(-12);
+    }
+
     @Test
-    public void testEquals() {
+    public void testEqualsWithValidData() {
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
                 {"Ali", 21, "Lebanon"},
@@ -250,6 +268,52 @@ public class DataFrameTest {
     }
 
     @Test
+    public void testEqualsWithSameObject() {
+        assertEquals(dfOneParam, dfOneParam);
+    }
+
+    @Test
+    public void testEqualsWithDifferentRowSize() {
+        String[] columnsLabels2 = {"Name", "Age", "Country"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"}
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+
+        String[] columnsLabels3 = {"Name", "Age", "Country"};
+        Object[][] rowsValues3 = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"},
+                {"Noemie", 23, "France"}
+        };
+        DataFrame df3 = new DataFrame(columnsLabels3, rowsValues3);
+        assertNotEquals(df2, df3);
+    }
+
+    @Test
+    public void testEqualsWithDifferentColumnSize() {
+        String[] columnsLabels2 = {"Name", "Age"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21},
+                {"Serge", 24},
+                {"Jorane", 23}
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+
+        String[] columnsLabels3 = {"Name", "Age", "Country"};
+        Object[][] rowsValues3 = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"}
+        };
+        DataFrame df3 = new DataFrame(columnsLabels3, rowsValues3);
+        assertNotEquals(df2, df3);
+    }
+
+    @Test
     public void testIlocWithIndexValide(){
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
@@ -259,6 +323,17 @@ public class DataFrameTest {
         int[] i={0};
         DataFrame df3 = dfOneParam.iloc(i);
         assertEquals(df3, df2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIlocWithNotIndex(){
+        String[] columnsLabels2 = {"Name", "Age", "Country"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21, "Lebanon"},
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+        int[] i={};
+        DataFrame df3 = dfOneParam.iloc(i);
     }
 
     @Test (expected = IndexOutOfBoundsException.class)
@@ -291,6 +366,7 @@ public class DataFrameTest {
         String[] columnsLabels2 = {"Sexe"};
         dfOneParam.loc(columnsLabels2);
     }
+
     @Test (expected = java.lang.IllegalArgumentException.class)
     public void testLocWithIndexInvalide2(){
         String[] columnsLabels2 = {};
@@ -302,6 +378,7 @@ public class DataFrameTest {
         Object[] meanExcepted = {null, 22.75, null};
         assertArrayEquals(meanExcepted, dfOneParam.moyenne());
     }
+
     @Test
     public void testMeanWithNullValue(){
         String[] lab = {"Name","Age"};
@@ -425,6 +502,26 @@ public class DataFrameTest {
         columnNames.add("unknown-column");
 
         DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, new ArrayList<>());
+    }
+
+    @Test
+    public void testPrintDf() {
+        dfOneParam.printDataFrame();
+    }
+
+    @Test
+    public void testDescribe() {
+        dfOneParam.describe();
+    }
+
+    @Test
+    public void testHead() {
+        dfOneParam.head(1);
+    }
+
+    @Test
+    public void testTail() {
+        dfOneParam.tail(1);
     }
 
 }
