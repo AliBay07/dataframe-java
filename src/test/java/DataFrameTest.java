@@ -1,11 +1,17 @@
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class DataFrameTest {
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
 
     private DataFrame dfOneParam;
     private DataFrame dfTwoParams;
@@ -35,6 +41,12 @@ public class DataFrameTest {
         String delimiter = ",";
         dfCSVOneParam = new DataFrame(pathToFile);
         dfCSVTwoParams = new DataFrame(pathToFile, delimiter);
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
     }
 
     @Test
@@ -505,26 +517,11 @@ public class DataFrameTest {
     }
 
     @Test
-
     public void testPrintDf() {
         dfOneParam.printDataFrame();
     }
 
     @Test
-    public void testDescribe() {
-        dfOneParam.describe();
-    }
-
-    @Test
-    public void testHead() {
-        dfOneParam.head(1);
-    }
-
-    @Test
-    public void testTail() {
-        dfOneParam.tail(1);
-    }
-
     public void testGroupMeanByWithValidData(){
         String[] labels = {"Age", "Number of Kids", "Country"};
         Object[][] data = {
@@ -582,9 +579,23 @@ public class DataFrameTest {
         assertEquals(df.groupby("Country", "sum"), dfExcepted);
     }
 
-
     @Test(expected = IllegalArgumentException.class)
     public void testGroupByWithInvalidData(){
         dfOneParam.groupby("Country", "test");
+    }
+
+    @Test
+    public void testDescribe() {
+        dfOneParam.describe();
+    }
+
+    @Test
+    public void testHead() {
+        dfOneParam.head(1);
+    }
+
+    @Test
+    public void testTail() {
+        dfOneParam.tail(1);
     }
 }

@@ -56,10 +56,7 @@
                         </goals>
                         <configuration>
                             <excludes>
-                                <exclude>DataFrame.describe</exclude>
-                                <exclude>DataFrame.tail</exclude>
-                                <exclude>DataFrame.head</exclude>
-                                <exclude>DataFrame.printDataFrame</exclude>
+                                <exclude>Demo.class</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -127,6 +124,19 @@
                         <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>Executing-Demo</id>
+                        <goals>
+                            <goal>java</goal>
                         </goals>
                     </execution>
                 </executions>

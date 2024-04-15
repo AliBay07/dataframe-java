@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Hashtable;
+import java.util.*;
 
 public class DataFrame {
 
@@ -493,7 +490,7 @@ public class DataFrame {
                     double cal = (((Number) columns.get(l)[j]).doubleValue() - ((Number) mean[i]).doubleValue());
                     res = res + cal * cal;
                 }
-                sd[i] = (double) Math.sqrt((double) 1 / columns.get(l).length * res);
+                sd[i] = Math.sqrt((double) 1 / columns.get(l).length * res);
             }
             else{
                 sd[i] = null;
@@ -591,10 +588,11 @@ public class DataFrame {
                         actualCol[j] = columns.get(lab)[idx];
                         j++;
                     }
-                    if(option == "mean"){
+
+                    if(Objects.equals(option, "mean")){
                         ligne[k] = meanForGroupBy(actualCol);
                     }
-                    else if(option == "sum"){
+                    else if(Objects.equals(option, "sum")){
                         ligne[k] = sumForGroupBy(actualCol);
                     }
                     else{
@@ -611,13 +609,7 @@ public class DataFrame {
     }
 
     public static double meanForGroupBy(Object[] nb){
-        double res = 0;
-        for(Object n : nb){
-            if(n instanceof Integer){
-                double d = (Integer) n;
-                res = res + d;
-            }
-        }
+        double res = sumForGroupBy(nb);
         return res / nb.length;
     }
 
