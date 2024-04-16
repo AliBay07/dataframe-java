@@ -1,9 +1,7 @@
 # Projet Dataframe en Java
-[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java) 
-[![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml) 
-[![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml) 
-[![Google Cloud](https://img.shields.io/badge/Google%20Cloud-My%20Resource-blue?logo=google-cloud)](http:35.222.62.82)
+ [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml) [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml) [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven-publish.yml/) 
 
+Package : [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java/packages/2123285)
 
 
 
@@ -29,6 +27,18 @@ mvn clean
 Pour générer le fichier JAR exécutable, vous pouvez utiliser la commande suivante :
 ```bash
 mvn package
+```
+
+## Création de l'image Docker et exécution du conteneur
+
+###### Construction de l'image Docker
+```bash
+docker build -t dataframe-java .
+```
+
+###### Exécution du conteneur à partir de l'image
+```bash
+docker run dataframe-java
 ```
 
 ## Fonctionnalités implémentées
