@@ -27,6 +27,6 @@ jobs:
     - name: Generate coverage badge
       uses: pooi/coverage-badge@1.0.0
       with:
-        token: ${{ secret.GITHUB_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
         xml-test-report-path: ${SOURCE_PATH}/target/site/jacoco/jacoco.xml
         html-test-report-path: ${SOURCE_PATH}/target/site/jacoco/index.html
