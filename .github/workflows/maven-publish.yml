@@ -11,18 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     
     permissions:
-      contents: write
+      contents: read
       packages: write
 
-    steps:
-      - name: Checking Email
-        run: |
-          if [ "$(git log -1 --format='%ae')" = "actions@github.com" ]; then
-            echo "Skipping workflow execution because pusher's email matches specified email address."
-            exit 78
-          fi
-        if: github.event_name == 'push'
-    
+    steps:    
       - name: Checkout Repository
         uses: actions/checkout@v3
 
@@ -34,25 +26,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
-   
-      - name: Increment Snapshot Version
-        id: increment-version
-        run: |
-          current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          incremented_version=$(echo $current_version | awk -F'[-]' '{split($1,a,"."); print a[1]"."(a[2]+1)"-SNAPSHOT"}')
-          mvn versions:set -DnewVersion=${incremented_version} -DgenerateBackupPoms=false
-          echo "::set-output name=new_version::$incremented_version"
-
-      - name: Commit Version Increment
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add pom.xml
-          git commit -m "Incremented snapshot version to ${{ steps.increment-version.outputs.new_version }}"
-          git push origin main
-        env:
-            GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+        run: mvn -B package --file pom.xml          
 
       - name: Deploy to GitHub Packages
         run: mvn --batch-mode deploy -DrepositoryId=github -Durl=https://maven.pkg.github.com/AliBay07/dataframe-java
