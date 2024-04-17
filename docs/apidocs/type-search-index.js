@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"CSVReader"},{"p":"<Unnamed>","l":"DataFrame"},{"p":"<Unnamed>","l":"Demo"}];updateSearchResults();
