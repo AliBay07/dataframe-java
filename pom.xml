@@ -16,6 +16,10 @@
             <name>GitHub OWNER Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/AliBay07/dataframe-java</url>
         </repository>
+        <site>
+            <id>github-site</id>
+            <url>scm:git:git@github.com:AliBay07/dataframe-java.git</url>
+        </site>
     </distributionManagement>
     <dependencies>
         <dependency>
