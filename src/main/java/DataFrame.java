@@ -552,6 +552,14 @@ public class DataFrame {
 
     }
 
+    /**
+     * Groups the DataFrame by the specified label column and aggregates the other columns based on the given option.
+     *
+     * @param label The label column to group by.
+     * @param option The aggregation option. Should be either "mean" or "sum".
+     * @return A new DataFrame with the aggregated values based on the grouping and aggregation option.
+     * @throws IllegalArgumentException If the option provided is neither "mean" nor "sum".
+     */
     public DataFrame groupby(String label, String option) {
         ArrayList<Object> ordre = new ArrayList<>();
         Hashtable<Object, ArrayList<Integer>> group = new Hashtable<>();
@@ -608,11 +616,23 @@ public class DataFrame {
         return new DataFrame(newlabels,res);
     }
 
+    /**
+     * Calculates the mean value for the provided array of numbers.
+     *
+     * @param nb The array of numbers.
+     * @return The mean value of the numbers.
+     */
     public static double meanForGroupBy(Object[] nb){
         double res = sumForGroupBy(nb);
         return res / nb.length;
     }
 
+    /**
+     * Calculates the sum of the numbers in the provided array.
+     *
+     * @param nb The array of numbers.
+     * @return The sum of the numbers.
+     */
     public static double sumForGroupBy(Object[] nb){
         double res = 0;
         for(Object n : nb){
@@ -623,6 +643,4 @@ public class DataFrame {
         }
         return res;
     }
-
-
 }
