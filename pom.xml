@@ -18,7 +18,7 @@
         </repository>
         <site>
             <id>github-site</id>
-            <url>scm:git:git@github.com:AliBay07/dataframe-java.git</url>
+            <url>git@github.com:AliBay07/dataframe-java.git</url>
         </site>
     </distributionManagement>
     <dependencies>
@@ -31,6 +31,14 @@
     </dependencies>
     <reporting>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <scmBranch>gh-pages</scmBranch>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
