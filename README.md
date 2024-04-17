@@ -66,6 +66,82 @@ Nous avons mis en place un workflow Git simple mais efficace pour assurer la qua
 3. La validation des pull/merge requests est gérée par au moins une personne qui doit approuver le merge request pour que la fusion soit autorisée.
 4. Nous avons utilisé des branches dédiées pour chaque fonctionnalité afin de travailler de manière isolée sur chaque caractéristique et faciliter la gestion des versions et la collaboration entre les membres de l'équipe.
 
+## Déploiement automatique d'une VM sur Google Cloud Platform depuis Git
+
+### Prérequis
+
+Avant de commencer, il faut s'assurer d'avoir les éléments suivants :
+
+- Un compte Google Cloud Platform avec les autorisations nécessaires pour créer des ressources.
+- `Terraform` et `Ansible` installés sur sa VM.
+Dans le cas contraire, on peut installer ces derniers en exécutant les commandes suivantes :
+```bash
+sudo apt install terraform 
+sudo apt install ansible
+```
+
+### Étapes
+
+#### 1. Créer un service account sur GCP
+
+```bash
+SERVICE_NAME=[SERVICE_NAME]
+PROJECT_NAME=$(gcloud config get-value project)
+gcloud iam service-accounts create [SERVICE_NAME]
+
+# Ajouter les autorisations au projet
+gcloud projects add-iam-policy-binding "$PROJECT_NAME" --member serviceAccount:"$SERVICE_NAME"@"$PROJECT_NAME".iam.gserviceaccount.com --role roles/editor
+#Générer une clé pour le service account
+gcloud iam service-accounts keys create ./[SERVICE_NAME].json --iam-account [SERVICE_NAME]@[PROJECT_NAME].iam.gserviceaccount.com
+```
+
+#### 2. Configurer `Terraform`
+
+Ensuite, il faut télécharger et extraire le fichier `terraform_basics.tar.gz` depuis ce [lien](https://roparst.gricad-pages.univ-grenoble-alpes.fr/cloud-tutorials/archives/terraform_basics.tar.gz) et modifier les fichiers `simple_deployment.tf` et `variables.tf` pour spécifier les paramètres du déploiement.
+
+#### 3. Créer et ajouter la paire de clés
+Pour établir une connexion avec la machine distante, une clé SSH est nécessaire. Une paire de clé se crée avec cette commande : 
+```bash
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/cloud_rsa
+```
+
+Le chemin vers le fichier contenant la clé publique est : `~/.ssh/cloud_rsa.pub`. Il faut l'ajouter au fichier `simple_deployement.tf`.
+
+#### 4. Configurer `Ansible`
+C'est l'outil `ansible` qui s'occupe d'installer le conteneur docker sur la nouvelle VM qui sera créée. Pour cela, il est nécessaire de préciser le nom du conteneur tel qu'il est enregistré dans le `DockerHub`.
+\
+Le fichier de configuration de `Terraform` nécessite une spécification de l'emplacement à partir duquel `Ansible` sera lancé.
+
+#### 5. Lancer `Terraform`
+
+```bash
+# Lancer l'outil
+terraform init
+
+# Vérifier le plan de déploiement
+terraform plan
+
+# Déployer l'infrastructure
+terraform apply
+```
+
+#### 6. Liaison avec Git
+
+Si tout s'est bien passé, à la fin de l'exécution de `terraform`, il y a une sortie de forme `ip = ...`, c'est avec cette adresse-ci que Git pourra communiquer avec la nouvelle VM, afin de s'assurer de l'installation et l'exécution de chaque nouvell image docker. Cette procédure s'appelle *CD*, Continuous Delivery.\
+En pratique, nous ne demandons pas à notre VM d'exécuter l'image, car c'est juste un programme qui fait un affichage et se termine, il n'y a donc pas d'intérêt à le lancer.
+
+
+##### 6.1 Création de secret 
+
+Afin de pouvoir connecter à la machine, il faut avoir la clé privée crée à l'étape `3`, qui se trouve dans le fichier `~/.ssh/cloud_rsa`, afin de créer un secret git.
+
+
+##### 6.2 Création de secret
+Ayant récupéré l'adresse IP, elle devra être ajoutée dans le fichier du workflow avec la clé et les commandes à exécuter sur la machine virtuelle.
+
+### Fin
+Ainsi, chaque *release* sera associée à une procédure automatique de déploiement.
+
 ## Options de développement logiciel et intégration continue réalisée
 
 L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à implémenter au niveau du développement logiciel et de l'intégration/la livraison continue est présenté ci-dessous :
@@ -75,7 +151,7 @@ L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à
 - [x] Adoption d'une méthode de travail collaborative : workflow git
 - [ ] Livraison continue avec Maven : déploiement des différentes versions de la bibliothèque dans le dépôt Maven
 - [x] Livraison continue avec Docker : construction d'une image Docker déroulant un scénario de présentation de la bibliothèque et déploiement sur Docker Hub
-- [ ] Infrastucture-as-code et cloud : déploiement automatique des conteneurs Docker sur des machines virtuelles dans Google Cloud
+- [x] Infrastucture-as-code et cloud : déploiement automatique des conteneurs Docker sur des machines virtuelles dans Google Cloud
 - [x] Insertion de badges : présence de badges associés aux workflows git mis en place
 - [x] Valorisation de la bibliothèque : création d'une page web sur Github Pages pour valorisé la bibliothèque
 
