@@ -1,5 +1,5 @@
 # Projet Dataframe en Java
- [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml) [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-image.yml) [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven-publish.yml/) 
+ [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven.yml) [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-and-cloud.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/docker-and-cloud.yml) [![Build Status](https://github.com/AliBay07/dataframe-java/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/AliBay07/dataframe-java/actions/workflows/maven-publish.yml/) 
 
 Package : [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java/packages/2123285)
 
