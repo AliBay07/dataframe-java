@@ -28,7 +28,7 @@ jobs:
       id: coverage
       # Generates a GitHub Workflow output named `lines`
       run: |
-        COVERAGE="$( ./../parser.sh )"
+        COVERAGE="$( ./parser.sh )"
         echo "##[set-output name=lines;]${COVERAGE}%"
     
     - name: Extract branch name
