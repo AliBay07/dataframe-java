@@ -79,9 +79,13 @@ L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à
 - [x] Insertion de badges : présence de badges associés aux workflows git mis en place
 - [x] Valorisation de la bibliothèque : création d'une page web sur Github Pages pour valorisé la bibliothèque
 
+## Lien vers la documentation du projet
+
+Pour accéder à la documentation en ligne générée par Maven, vous devez lancer la commande `mvn 
+
 ## Lien vers le rapport de test de Jacoco
 
-Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance la commande `mvn site` qui génère le site associé au projet java et crée le dossier `target/site`. Au sein de ce dossier, vous trouverez le rapport de jacoco concernant les tests et la couverture de code dans le fichier `jacoco/index.html`.
+Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance les tests JUnit et la couverture de code avec l'outil Jacoco. En parallèle, la commande `mvn site` génère le site associé au projet que vous pouvez retrouver à l'adresse suivante : https://alibay07.github.io/dataframe-java/docs/report/index.html
 
 ## Retours d'expérience sur les outils utilisés
 

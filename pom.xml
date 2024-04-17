@@ -55,6 +55,7 @@
                                 <exclude>DataFrame.head</exclude>
                                 <exclude>DataFrame.printDataFrame</exclude>
                             </excludes>
+                            <outputDirectory>${project.reporting.outputDirectory}/../../docs/report</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -104,6 +105,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+              <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                <filesets>
+                    <fileset>
+                    <directory>./docs</directory>
+                    <excludes>
+                        <exclude>README.md</exclude>
+                    </excludes>
+                    </fileset>
+                </filesets>
+                </configuration>
             </plugin>
         </plugins>
     </build>
