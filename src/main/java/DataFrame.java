@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Hashtable;
+import java.util.*;
 
 public class DataFrame {
 
@@ -493,7 +490,7 @@ public class DataFrame {
                     double cal = (((Number) columns.get(l)[j]).doubleValue() - ((Number) mean[i]).doubleValue());
                     res = res + cal * cal;
                 }
-                sd[i] = (double) Math.sqrt((double) 1 / columns.get(l).length * res);
+                sd[i] = Math.sqrt((double) 1 / columns.get(l).length * res);
             }
             else{
                 sd[i] = null;
@@ -555,4 +552,95 @@ public class DataFrame {
 
     }
 
+    /**
+     * Groups the DataFrame by the specified label column and aggregates the other columns based on the given option.
+     *
+     * @param label The label column to group by.
+     * @param option The aggregation option. Should be either "mean" or "sum".
+     * @return A new DataFrame with the aggregated values based on the grouping and aggregation option.
+     * @throws IllegalArgumentException If the option provided is neither "mean" nor "sum".
+     */
+    public DataFrame groupby(String label, String option) {
+        ArrayList<Object> ordre = new ArrayList<>();
+        Hashtable<Object, ArrayList<Integer>> group = new Hashtable<>();
+        //Rempli la hashtable avec Object du groupe et les index a regrouper pour les autres colonnes
+        int i = 0;
+        for(Object o: columns.get(label)){
+            ArrayList<Integer> idx;
+            if(ordre.contains(o)){
+                idx = group.get(o);
+                idx.add(i);
+            }
+            else{
+                ordre.add(o);
+                idx = new ArrayList<>();
+                idx.add(i);
+            }
+            group.put(o, idx);
+            i++;
+        }
+        
+        Object[][] res = new Object[ordre.size()][];
+        String[] newlabels = new String[labels.size()];
+        int z = 0;
+        for(Object o: ordre){
+            Object[] ligne = new Object[labels.size()];
+            ligne[0] = o;
+            newlabels[0] = label;
+            int k = 1;
+            for(String lab : labels){
+                if(!lab.equals(label) && (columns.get(lab)[0] instanceof Number)){
+                    Object[] actualCol = new Object[group.get(o).size()];
+                    int j = 0;
+                    for(int idx : group.get(o)){
+                        actualCol[j] = columns.get(lab)[idx];
+                        j++;
+                    }
+
+                    if(Objects.equals(option, "mean")){
+                        ligne[k] = meanForGroupBy(actualCol);
+                    }
+                    else if(Objects.equals(option, "sum")){
+                        ligne[k] = sumForGroupBy(actualCol);
+                    }
+                    else{
+                        throw new IllegalArgumentException("L'option choisie en second parametre doit etre soit \"mean\" soit \"sum\".");
+                    }
+                    newlabels[k] = lab;
+                    k++;
+                }
+            }
+            res[z] = ligne ;
+            z++;
+        }
+        return new DataFrame(newlabels,res);
+    }
+
+    /**
+     * Calculates the mean value for the provided array of numbers.
+     *
+     * @param nb The array of numbers.
+     * @return The mean value of the numbers.
+     */
+    public static double meanForGroupBy(Object[] nb){
+        double res = sumForGroupBy(nb);
+        return res / nb.length;
+    }
+
+    /**
+     * Calculates the sum of the numbers in the provided array.
+     *
+     * @param nb The array of numbers.
+     * @return The sum of the numbers.
+     */
+    public static double sumForGroupBy(Object[] nb){
+        double res = 0;
+        for(Object n : nb){
+            if(n instanceof Integer){
+                double d = (Integer) n;
+                res = res + d;
+            }
+        }
+        return res;
+    }
 }

@@ -1,11 +1,17 @@
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class DataFrameTest {
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
 
     private DataFrame dfOneParam;
     private DataFrame dfTwoParams;
@@ -35,6 +41,12 @@ public class DataFrameTest {
         String delimiter = ",";
         dfCSVOneParam = new DataFrame(pathToFile);
         dfCSVTwoParams = new DataFrame(pathToFile, delimiter);
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
     }
 
     @Test
@@ -50,6 +62,11 @@ public class DataFrameTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetRowValuesWithInvalidIndex() {
         dfTwoParams.getRowValues(10);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetRowValuesWithNegativeIndex() {
+        dfTwoParams.getRowValues(-10);
     }
 
     @Test
@@ -205,6 +222,11 @@ public class DataFrameTest {
         DataFrame df = new DataFrame(pathtoFile);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetColumnValuesWithInvalidColumn(){
+        dfTwoParams.getColumnValues("unknown");
+    }
+
     @Test
     public void testGetLabel(){
         assertEquals("Name",dfOneParam.getLabel(0));
@@ -218,8 +240,16 @@ public class DataFrameTest {
         String er = dfOneParam.getLabel(12);
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetLabelWithNegativeIndex(){
+        int[] i={0};
+        dfOneParam.iloc(i);
+
+        String er = dfOneParam.getLabel(-12);
+    }
+
     @Test
-    public void testEquals() {
+    public void testEqualsWithValidData() {
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
                 {"Ali", 21, "Lebanon"},
@@ -250,6 +280,52 @@ public class DataFrameTest {
     }
 
     @Test
+    public void testEqualsWithSameObject() {
+        assertEquals(dfOneParam, dfOneParam);
+    }
+
+    @Test
+    public void testEqualsWithDifferentRowSize() {
+        String[] columnsLabels2 = {"Name", "Age", "Country"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"}
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+
+        String[] columnsLabels3 = {"Name", "Age", "Country"};
+        Object[][] rowsValues3 = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"},
+                {"Noemie", 23, "France"}
+        };
+        DataFrame df3 = new DataFrame(columnsLabels3, rowsValues3);
+        assertNotEquals(df2, df3);
+    }
+
+    @Test
+    public void testEqualsWithDifferentColumnSize() {
+        String[] columnsLabels2 = {"Name", "Age"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21},
+                {"Serge", 24},
+                {"Jorane", 23}
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+
+        String[] columnsLabels3 = {"Name", "Age", "Country"};
+        Object[][] rowsValues3 = {
+                {"Ali", 21, "Lebanon"},
+                {"Serge", 24, "Armenia"},
+                {"Jorane", 23, "France"}
+        };
+        DataFrame df3 = new DataFrame(columnsLabels3, rowsValues3);
+        assertNotEquals(df2, df3);
+    }
+
+    @Test
     public void testIlocWithIndexValide(){
         String[] columnsLabels2 = {"Name", "Age", "Country"};
         Object[][] rowsValues2 = {
@@ -259,6 +335,17 @@ public class DataFrameTest {
         int[] i={0};
         DataFrame df3 = dfOneParam.iloc(i);
         assertEquals(df3, df2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIlocWithNotIndex(){
+        String[] columnsLabels2 = {"Name", "Age", "Country"};
+        Object[][] rowsValues2 = {
+                {"Ali", 21, "Lebanon"},
+        };
+        DataFrame df2 = new DataFrame(columnsLabels2, rowsValues2);
+        int[] i={};
+        DataFrame df3 = dfOneParam.iloc(i);
     }
 
     @Test (expected = IndexOutOfBoundsException.class)
@@ -291,6 +378,7 @@ public class DataFrameTest {
         String[] columnsLabels2 = {"Sexe"};
         dfOneParam.loc(columnsLabels2);
     }
+
     @Test (expected = java.lang.IllegalArgumentException.class)
     public void testLocWithIndexInvalide2(){
         String[] columnsLabels2 = {};
@@ -302,6 +390,7 @@ public class DataFrameTest {
         Object[] meanExcepted = {null, 22.75, null};
         assertArrayEquals(meanExcepted, dfOneParam.moyenne());
     }
+
     @Test
     public void testMeanWithNullValue(){
         String[] lab = {"Name","Age"};
@@ -427,4 +516,86 @@ public class DataFrameTest {
         DataFrame filteredDataFrame = dfTwoParams.filter(columnNames, new ArrayList<>());
     }
 
+    @Test
+    public void testPrintDf() {
+        dfOneParam.printDataFrame();
+    }
+
+    @Test
+    public void testGroupMeanByWithValidData(){
+        String[] labels = {"Age", "Number of Kids", "Country"};
+        Object[][] data = {
+            {20, 0, "France"},
+            {36, 2, "Espage"},
+            {30, 4, "Suisse"},
+            {33, 1, "France"},
+            {25, 0, "France"},
+            {22, 2, "Suisse"},
+            {27, 4, "France"},
+            {22, 2, "France"},
+            {41, 0, "Suisse"},
+            {30, 1, "Espage"},
+        };
+        
+        DataFrame df = new DataFrame(labels, data);
+
+        String[] labelsExcepted = {"Country", "Age", "Number of Kids"};
+        Object[][] dataExcepted = {
+            {"France", 25.4, 1.4},
+            {"Espage", 33.0, 1.5},
+            {"Suisse", 31.0, 2.0}
+        };
+        
+        DataFrame dfExcepted = new DataFrame(labelsExcepted, dataExcepted);
+        assertEquals(df.groupby("Country", "mean"), dfExcepted);
+    }
+
+    @Test
+    public void testGroupSumByWithValidData(){
+        String[] labels = {"Age", "Number of Kids", "Country"};
+        Object[][] data = {
+            {20, 0, "France"},
+            {36, 2, "Espage"},
+            {30, 4, "Suisse"},
+            {33, 1, "France"},
+            {25, 0, "France"},
+            {22, 2, "Suisse"},
+            {27, 4, "France"},
+            {22, 2, "France"},
+            {41, 0, "Suisse"},
+            {30, 1, "Espage"}
+        };
+        
+        DataFrame df = new DataFrame(labels, data);
+
+        String[] labelsExcepted = {"Country", "Age", "Number of Kids"};
+        Object[][] dataExcepted = {
+            {"France", 127.0, 7.0},
+            {"Espage", 66.0, 3.0},
+            {"Suisse", 93.0, 6.0}
+        };
+        
+        DataFrame dfExcepted = new DataFrame(labelsExcepted, dataExcepted);
+        assertEquals(df.groupby("Country", "sum"), dfExcepted);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGroupByWithInvalidData(){
+        dfOneParam.groupby("Country", "test");
+    }
+
+    @Test
+    public void testDescribe() {
+        dfOneParam.describe();
+    }
+
+    @Test
+    public void testHead() {
+        dfOneParam.head(1);
+    }
+
+    @Test
+    public void testTail() {
+        dfOneParam.tail(1);
+    }
 }

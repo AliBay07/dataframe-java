@@ -1,3 +1,2 @@
 #!/bin/bash
-mvn clean
-mvn test
+mvn clean compile exec:java -Dexec.mainClass="Demo"
