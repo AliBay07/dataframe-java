@@ -66,6 +66,23 @@ Nous avons mis en place un workflow Git simple mais efficace pour assurer la qua
 3. La validation des pull/merge requests est gérée par au moins une personne qui doit approuver le merge request pour que la fusion soit autorisée.
 4. Nous avons utilisé des branches dédiées pour chaque fonctionnalité afin de travailler de manière isolée sur chaque caractéristique et faciliter la gestion des versions et la collaboration entre les membres de l'équipe.
 
+## Options de développement logiciel et intégration continue réalisée
+
+L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à implémenter au niveau du développement logiciel et de l'intégration/la livraison continue est présenté ci-dessous :
+
+- [x] Mise en place de Github
+- [x] Intégration continue avec un pipeline Github Actions
+- [x] Adoption d'une méthode de travail collaborative : workflow git
+- [ ] Livraison continue avec Maven : déploiement des différentes versions de la bibliothèque dans le dépôt Maven
+- [x] Livraison continue avec Docker : construction d'une image Docker déroulant un scénario de présentation de la bibliothèque et déploiement sur Docker Hub
+- [ ] Infrastucture-as-code et cloud : déploiement automatique des conteneurs Docker sur des machines virtuelles dans Google Cloud
+- [x] Insertion de badges : présence de badges associés aux workflows git mis en place
+- [x] Valorisation de la bibliothèque : création d'une page web sur Github Pages pour valorisé la bibliothèque
+
+## Lien vers le rapport de test de Jacoco
+
+Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance la commande `mvn site` qui génère le site associé au projet java et crée le dossier `target/site`. Au sein de ce dossier, vous trouverez le rapport de jacoco concernant les tests et la couverture de code dans le fichier `jacoco/index.html`.
+
 ## Retours d'expérience sur les outils utilisés
 
 - **Maven et Docker :** Ces outils simplifient le travail mais peuvent être un peu compliqués à utiliser au départ.
