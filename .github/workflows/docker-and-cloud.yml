@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Image CI & Cloud Deployment CD
 
 on:
   push:
@@ -27,3 +27,20 @@ jobs:
         
     - name: Push Docker image to Docker Hub
       run: docker push alibay07/dataframe-java:latest
+  deployment:
+    if: ${{ always() }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.7.0
+      with: 
+        ssh-private-key: ${{ secrets.SSH_SECRET }}
+
+    - name: Connect to VM
+      run: ssh dev@35.192.5.188
+
+    - name: Docker pull
+      run: sudo docker pull alibay07/dataframe-java
