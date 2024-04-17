@@ -1,0 +1,26 @@
+- name: Installation de Docker
+  hosts: all
+  become: true
+  tasks:
+    - name: Installation de Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Démarrage du service Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker image
+      community.docker.docker_image:
+        name: alibay07/dataframe-java
+        source: pull
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: my_devops
+        image: alibay07/dataframe-java:latest
+        state: started
