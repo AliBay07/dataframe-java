@@ -28,7 +28,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
    
-      - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy
+      - name: Update Version
+        run: |
+          mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | awk -F'.' '{$NF = $NF + 1;} 1' OFS='.')
+          git commit -am "Increment version number"
+          git push
+          
+      - name: Publish Snapshot to GitHub Packages
+        run: mvn --batch-mode deploy -DrepositoryId=github -Durl=https://maven.pkg.github.com/OWNER/REPOSITORY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
