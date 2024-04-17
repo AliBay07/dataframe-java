@@ -43,4 +43,7 @@ jobs:
         port: 22
         script: |
           whoami
-          sudo docker pull alibay07/dataframe-java 
+          sudo -i
+          whoami
+          docker pull alibay07/dataframe-java 
+          docker images | grep alibay |grep -v latest | cut -d' ' -f8 | xargs -r docker rmi -f
