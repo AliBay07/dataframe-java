@@ -3,8 +3,6 @@
 
 Package : [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AliBay07/dataframe-java/packages/2123285)
 
-![Coverage](https://github.com/AliBay07/dataframe-java/badges/badge.svg)
-
 
 Ce projet vise à fournir une implémentation en Java équivalente au DataFrame de la bibliothèque pandas en Python.
 
