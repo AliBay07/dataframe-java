@@ -24,14 +24,14 @@ jobs:
     - name: Run Tests
       run: mvn -B test --file pom.xml
 
-      - name: Generate a coverage value
+    - name: Generate a coverage value
       id: coverage
       # Generates a GitHub Workflow output named `lines`
       run: |
         COVERAGE="$( ./../parser.sh )"
         echo "##[set-output name=lines;]${COVERAGE}%"
     
-      - name: Extract branch name
+    - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
