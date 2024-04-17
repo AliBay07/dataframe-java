@@ -5,15 +5,15 @@ on: [push]
     #     branches: [ "main" ]
 
 jobs:
-    build: 
-        name: Create badges
+    coverage: 
         runs-on: ubuntu-latest
 
         steps:      
          - name: Generate a coverage value
         id: coverage
         # Generates a GitHub Workflow output named `lines`
-        run: COVERAGE="$( ./../parser.sh )"
+        run: |
+            COVERAGE="$( ./../parser.sh )"
             echo "##[set-output name=lines;]${COVERAGE}%"
         - name: Extract branch name
         shell: bash
