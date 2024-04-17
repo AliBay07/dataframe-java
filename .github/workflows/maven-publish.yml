@@ -43,7 +43,7 @@ jobs:
           git add pom.xml
           git commit -m "Incremented snapshot version to ${{ steps.increment-version.outputs.new_version }}"
           git pull origin main
-          git push origin HEAD:main
+          git push origin main
         env:
             GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
 
