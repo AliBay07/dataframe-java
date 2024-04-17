@@ -25,7 +25,7 @@ jobs:
       run: mvn -B test --file pom.xml
 
     - name: Generate coverage badge
-    - uses: pooi/coverage-badge@1.0.0
+      uses: pooi/coverage-badge@1.0.0
       with:
         token: ${{ secret.GITHUB_ACCESS_TOKEN }}
         xml-test-report-path: ${SOURCE_PATH}/target/site/jacoco/jacoco.xml
