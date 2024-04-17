@@ -157,11 +157,11 @@ L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à
 
 ## Lien vers la documentation du projet
 
-Vous retrouverez la documentation java liée au projet dans le dossier `./docs/apidocs` sur le fichier `index.html`.
+Pour générer la Javadoc du projet, exécutez la commande `mvn javadoc:javadoc`. Vous pourrez ensuite trouver la documentation dans le répertoire `./target/site/apidocs`, où la page principale est située dans le fichier `index.html`.
 
 ## Lien vers le rapport de test de Jacoco
 
-Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance les tests JUnit et la couverture de code avec l'outil Jacoco et crée les rapports associés dans le dossier `./docs/report` où le résumé est situé dans le fichier `index.html`.
+Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance les tests JUnit et la couverture de code avec l'outil Jacoco et crée les rapports associés dans le dossier `./target/site/jacoco` où le résumé est situé dans le fichier `index.html`.
 
 ## Pages GitHub
 
