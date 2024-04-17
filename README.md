@@ -81,11 +81,11 @@ L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à
 
 ## Lien vers la documentation du projet
 
-Pour accéder à la documentation en ligne générée par Maven, vous devez lancer la commande `mvn 
+Vous retrouverez la documentation java liée au projet dans le dossier `./docs/apidocs` sur le fichier `index.html`.
 
 ## Lien vers le rapport de test de Jacoco
 
-Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance les tests JUnit et la couverture de code avec l'outil Jacoco. En parallèle, la commande `mvn site` génère le site associé au projet que vous pouvez retrouver à l'adresse suivante : https://alibay07.github.io/dataframe-java/docs/report/index.html
+Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance les tests JUnit et la couverture de code avec l'outil Jacoco et crée les rapports associés dans le dossier `./docs/report` où le résumé est situé dans le fichier `index.html`.
 
 ## Retours d'expérience sur les outils utilisés
 

@@ -114,7 +114,7 @@
                     <fileset>
                     <directory>./docs</directory>
                     <excludes>
-                        <exclude>README.md</exclude>
+                        <exclude>**/apidocs/*</exclude>
                     </excludes>
                     </fileset>
                 </filesets>
