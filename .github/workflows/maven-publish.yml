@@ -42,7 +42,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add pom.xml
           git commit -m "Incremented snapshot version to ${{ steps.increment-version.outputs.new_version }}"
-          git push
+          git push origin HEAD:main
 
       - name: Deploy to GitHub Packages
         run: mvn --batch-mode deploy -DrepositoryId=github -Durl=https://maven.pkg.github.com/AliBay07/dataframe-java
