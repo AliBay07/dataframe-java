@@ -149,7 +149,7 @@ L'état d'avancement du projet vis à vis des suggestions de fonctionnalités à
 - [x] Mise en place de Github
 - [x] Intégration continue avec un pipeline Github Actions
 - [x] Adoption d'une méthode de travail collaborative : workflow git
-- [ ] Livraison continue avec Maven : déploiement des différentes versions de la bibliothèque dans le dépôt Maven
+- [x] Livraison continue avec Maven : déploiement des différentes versions de la bibliothèque dans le dépôt Maven
 - [x] Livraison continue avec Docker : construction d'une image Docker déroulant un scénario de présentation de la bibliothèque et déploiement sur Docker Hub
 - [x] Infrastucture-as-code et cloud : déploiement automatique des conteneurs Docker sur des machines virtuelles dans Google Cloud
 - [x] Insertion de badges : présence de badges associés aux workflows git mis en place
@@ -162,6 +162,10 @@ Vous retrouverez la documentation java liée au projet dans le dossier `./docs/a
 ## Lien vers le rapport de test de Jacoco
 
 Pour accéder au rapport de couverture de code construit par Jacoco, vous pouvez y accéder après avoir lancer la commande `mvn test`. Cette dernière lance les tests JUnit et la couverture de code avec l'outil Jacoco et crée les rapports associés dans le dossier `./docs/report` où le résumé est situé dans le fichier `index.html`.
+
+## Pages GitHub
+
+Vous pouvez consulter les pages GitHub de ce projet à l'adresse suivante : [https://alibay07.github.io/dataframe-java/](https://alibay07.github.io/dataframe-java/).
 
 ## Retours d'expérience sur les outils utilisés
 
